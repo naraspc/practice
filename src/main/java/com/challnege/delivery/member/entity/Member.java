@@ -1,9 +1,6 @@
 package com.challnege.delivery.member.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,13 +25,14 @@ public class Member {
 
     private String address;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
     public Member(String email, String password, String nickName, String phoneNumber, String address, Role role) {
         this.email = email;
         this.password = password;
-        NickName = nickName;
+        this.NickName = nickName;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.role = role;
