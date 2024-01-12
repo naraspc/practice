@@ -29,4 +29,9 @@ public class Wallet extends Auditable {
         this.point = point;
         this.spending = spending;
     }
+
+    public void spentPoint(Long pointsToSpend) {
+        this.point = getPoint() - pointsToSpend;
+        this.spending = getSpending() + pointsToSpend;
+    }
 }
