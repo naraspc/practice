@@ -10,7 +10,7 @@ import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor
-public class MemberPostDto {
+public class MemberRequestDto {
 
     @Email
     @NonNull
