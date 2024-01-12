@@ -1,8 +1,10 @@
 package com.challnege.delivery.domain.review.controller;
 
 import com.challnege.delivery.domain.review.dto.ReviewRequestDto;
+import com.challnege.delivery.domain.review.dto.ReviewResponseDto;
 import com.challnege.delivery.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,14 +14,14 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/api/restaurants/{restaurantId}/reviews")
-    public void postReview(@PathVariable Long restaurantId,
-                           @RequestBody ReviewRequestDto requestDto){
-        reviewService.postReview(restaurantId,requestDto);
+    public ResponseEntity<ReviewResponseDto> postReview(@PathVariable Long restaurantId,
+                                                        @RequestBody ReviewRequestDto requestDto){
+        return reviewService.postReview(restaurantId,requestDto);
     }
 
-    @DeleteMapping("restauransts/{restaurantsId}/reviews/{reviewId}")
-    public void deleteReview(@PathVariable Long restaurantsId,
+    @DeleteMapping("restauransts/{restaurantId}/reviews/{reviewId}")
+    public ResponseEntity<ReviewResponseDto> deleteReview(@PathVariable Long restaurantId,
                              @PathVariable Long reviewId){
-        reviewService.deleteReview(restaurantsId,reviewId);
+        return reviewService.deleteReview(restaurantId,reviewId);
     }
 }
