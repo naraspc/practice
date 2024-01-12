@@ -1,6 +1,6 @@
-package com.challnege.delivery.member.repository;
+package com.challnege.delivery.domain.member.repository;
 
-import com.challnege.delivery.member.entity.Member;
+import com.challnege.delivery.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

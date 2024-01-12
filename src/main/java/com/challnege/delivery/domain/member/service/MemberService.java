@@ -1,9 +1,9 @@
-package com.challnege.delivery.member.service;
+package com.challnege.delivery.domain.member.service;
 
-import com.challnege.delivery.member.dto.MemberRequestDto;
-import com.challnege.delivery.member.dto.MemberResponseDto;
-import com.challnege.delivery.member.entity.Member;
-import com.challnege.delivery.member.repository.MemberRepository;
+import com.challnege.delivery.domain.member.dto.MemberRequestDto;
+import com.challnege.delivery.domain.member.dto.MemberResponseDto;
+import com.challnege.delivery.domain.member.entity.Member;
+import com.challnege.delivery.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

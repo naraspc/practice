@@ -1,4 +1,4 @@
-package com.challnege.delivery.member.entity;
+package com.challnege.delivery.domain.member.entity;
 
 import lombok.Getter;
 

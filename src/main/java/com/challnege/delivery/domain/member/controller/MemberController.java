@@ -1,8 +1,8 @@
-package com.challnege.delivery.member.controller;
+package com.challnege.delivery.domain.member.controller;
 
-import com.challnege.delivery.member.dto.MemberRequestDto;
-import com.challnege.delivery.member.dto.MemberResponseDto;
-import com.challnege.delivery.member.service.MemberService;
+import com.challnege.delivery.domain.member.dto.MemberRequestDto;
+import com.challnege.delivery.domain.member.dto.MemberResponseDto;
+import com.challnege.delivery.domain.member.service.MemberService;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

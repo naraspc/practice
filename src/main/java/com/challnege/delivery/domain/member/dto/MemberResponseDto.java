@@ -1,10 +1,9 @@
-package com.challnege.delivery.member.dto;
+package com.challnege.delivery.domain.member.dto;
 
-import com.challnege.delivery.member.entity.Member;
-import com.challnege.delivery.member.entity.Role;
+import com.challnege.delivery.domain.member.entity.Member;
+import com.challnege.delivery.domain.member.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 
 @Getter
 public class MemberResponseDto {
