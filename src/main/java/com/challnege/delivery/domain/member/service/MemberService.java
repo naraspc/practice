@@ -27,9 +27,11 @@ public class MemberService {
         return MemberResponseDto.fromEntity(member);
     }
 
-//    public MemberResponseDto readMember(long memberId) {
-//        Member member = findMemberById(memberId);
-//    }
+    @Transactional(readOnly = true)
+    public MemberResponseDto readMember(long memberId) {
+        Member member = findMemberById(memberId);
+        return MemberResponseDto.fromEntity(member);
+    }
 
     public void deleteMember(long memberId) {
         isMemberExist(memberId);
