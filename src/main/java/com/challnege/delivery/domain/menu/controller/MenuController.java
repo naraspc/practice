@@ -11,13 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
+    // 메뉴 등록
     @PostMapping("/restaurants/{restaurantsId}/menus")
     public ResponseEntity<MenuResponseDto> createMenu(
             @PathVariable Long restaurantsId,
