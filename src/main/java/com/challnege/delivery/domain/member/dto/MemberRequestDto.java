@@ -1,7 +1,7 @@
-package com.challnege.delivery.member.dto;
+package com.challnege.delivery.domain.member.dto;
 
-import com.challnege.delivery.member.entity.Member;
-import com.challnege.delivery.member.entity.Role;
+import com.challnege.delivery.domain.member.entity.Member;
+import com.challnege.delivery.domain.member.entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
