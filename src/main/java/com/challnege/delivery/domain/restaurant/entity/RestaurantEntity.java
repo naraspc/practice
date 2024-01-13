@@ -1,4 +1,4 @@
-package com.challnege.delivery.restaurant.entity;
+package com.challnege.delivery.domain.restaurant.entity;
 
 public class RestaurantEntity {
 }
