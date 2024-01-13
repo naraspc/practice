@@ -1,4 +1,5 @@
-package com.challnege.delivery.restaurant.dto;
+
+package com.challnege.delivery.domain.restaurant.dto;
 
 public class RestaurantRequestDto {
 }
