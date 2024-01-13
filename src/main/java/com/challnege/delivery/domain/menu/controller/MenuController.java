@@ -25,9 +25,9 @@ public class MenuController {
     @PostMapping("/{restaurantsId}/menus")
     public ResponseEntity<MenuResponseDto> createMenu(
             @PathVariable Long restaurantsId,
-            @RequestPart MultipartFile image,
+//            @RequestPart MultipartFile image,
             @RequestPart MenuRequestDto menuRequestDto) {
-        MenuResponseDto menuResponseDto = menuService.createMenu(restaurantsId, image, menuRequestDto);
+        MenuResponseDto menuResponseDto = menuService.createMenu(restaurantsId, /*image,*/ menuRequestDto);
         return ResponseEntity.ok(menuResponseDto);
     }
 
@@ -43,9 +43,9 @@ public class MenuController {
     public ResponseEntity<MenuResponseDto> updateMenu(
             @PathVariable Long restaurantsId,
             @PathVariable Long menuId,
-            @RequestPart MultipartFile image,
+//            @RequestPart MultipartFile image,
             @RequestPart MenuRequestDto menuRequestDto) {
-        MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, image, menuRequestDto);
+        MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, /*image,*/ menuRequestDto);
         return ResponseEntity.ok(menuResponseDto);
     }
 
