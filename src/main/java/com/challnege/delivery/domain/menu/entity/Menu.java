@@ -26,19 +26,19 @@ public class Menu extends Auditable {
     @Column(nullable = false)
     private int price;
 
-    @Lob
-    private byte[] image;
+//    @Lob
+//    private byte[] image;
 
-    public Menu(Restaurant restaurant, byte[] imageBytes, MenuRequestDto menuRequestDto) {
+    public Menu(Restaurant restaurant, /*byte[] imageBytes,*/ MenuRequestDto menuRequestDto) {
         this.restaurant = restaurant;
         this.foodName = menuRequestDto.getFoodName();
         this.price = menuRequestDto.getPrice();
-        this.image = imageBytes;
+//        this.image = imageBytes;
     }
 
-    public void updateMenu(Restaurant restaurant, byte[] imageBytes, MenuRequestDto menuRequestDto) {
+    public void updateMenu(Restaurant restaurant, /*byte[] imageBytes,*/ MenuRequestDto menuRequestDto) {
         this.restaurant = restaurant;
-        this.image = imageBytes;
+//        this.image = imageBytes;
         this.foodName = menuRequestDto.getFoodName();
         this.price = menuRequestDto.getPrice();
     }
