@@ -1,0 +1,55 @@
+<!-- menu.html -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management</title>
+</head>
+<body>
+
+<!-- Create Menu Form -->
+<h2>Create Menu</h2>
+<form th:action="@{/restaurant/{restaurantsId}/menus}" th:object="${menuRequestDto}" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{restaurantsId}" th:value="${menuResponse.restaurant.id}" />
+    <label for="createImage">Image:</label>
+    <input type="file" id="createImage" name="image" accept="image/*" required/>
+    <label for="createFoodName">Menu Name:</label>
+    <input type="text" id="createFoodName" name="foodName" th:field="*{foodName}" required/>
+    <label for="createPrice">Price:</label>
+    <input type="number" id="createPrice" name="price" th:field="*{price}" required/>
+    <button type="submit">Create Menu</button>
+</form>
+
+<!-- Update Menu Form -->
+<h2>Update Menu</h2>
+<form th:action="@{/restaurant/{restaurantsId}/menus/{menuId}}" th:object="${menuRequestDto}" method="post">
+    <input type="hidden" th:field="*{restaurantsId}" th:value="${menuResponse.restaurant.id}" />
+    <input type="hidden" th:field="*{menuId}" th:value="${menuResponse.id}" />
+    <label for="updateFoodName">Updated Menu Name:</label>
+    <input type="text" id="updateFoodName" name="foodName" th:field="*{foodName}" required/>
+    <label for="updatePrice">Updated Price:</label>
+    <input type="number" id="updatePrice" name="price" th:field="*{price}" required/>
+    <button type="submit">Update Menu</button>
+</form>
+
+<!-- Update Menu Image Form -->
+<h2>Update Menu Image</h2>
+<form th:action="@{/restaurant/{restaurantsId}/menus/{menuId}/images}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="restaurantsId" th:value="${menuResponse.restaurant.id}" />
+    <input type="hidden" name="menuId" th:value="${menuResponse.id}" />
+    <label for="updateImage">Updated Image:</label>
+    <input type="file" id="updateImage" name="image" accept="image/*" required/>
+    <button type="submit">Update Menu Image</button>
+</form>
+
+<!-- Delete Menu Form -->
+<h2>Delete Menu</h2>
+<form th:action="@{/restaurant/{restaurantsId}/menus/{menuId}}" method="post">
+    <input type="hidden" name="_method" value="delete" />
+    <button type="submit">Delete Menu</button>
+</form>
+
+</body>
+</html>
