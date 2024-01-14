@@ -2,12 +2,16 @@ package com.challnege.delivery.domain.order.service;
 
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.member.service.MemberService;
+import com.challnege.delivery.domain.menu.entity.Menu;
+import com.challnege.delivery.domain.menu.repository.MenuRepository;
 import com.challnege.delivery.domain.order.dto.OrderResponseDto;
 import com.challnege.delivery.domain.order.entity.Order;
 import com.challnege.delivery.domain.order.entity.Status;
 import com.challnege.delivery.domain.order.repository.OrderRepository;
 import com.challnege.delivery.domain.ordermenu.entity.OrderMenu;
 import com.challnege.delivery.domain.ordermenu.repository.OrderMenuRepository;
+import com.challnege.delivery.domain.restaurant.entity.Restaurant;
+import com.challnege.delivery.domain.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,21 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberService memberService;
     private final OrderMenuRepository orderMenuRepository;
+    //-------------------------------------------------------------------------//
+    private final RestaurantRepository restaurantRepository;
+    private final MenuRepository menuRepository;
+    private Menu findMenuByMenuId(long menuId) {
+        Optional<Menu> optionalMenu = menuRepository.findById(menuId);
+        Menu menu = optionalMenu.orElseThrow(() -> new NullPointerException("메뉴 없음"));
+        return menu;
+    }
+
+    private Restaurant findRestaurantById(long restaurantId) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
+        Restaurant restaurant = optionalRestaurant.orElseThrow(() -> new NullPointerException("식당 없음"));
+        return restaurant;
+    }
+    //-------------------------------------------------------------------------//
     @Transactional(readOnly = true)
     public OrderResponseDto readCurrentOrder(long memberId) {
         memberService.isMemberExist(memberId);
@@ -36,21 +55,25 @@ public class OrderService {
 
     }
 
+
     public OrderResponseDto addToOrder(long restaurantId, long menuId, long quantity, long memberId) {
         Member member = memberService.findMemberById(memberId);
 //        Menu menu = menuService.findMenuById(menuId);
+        Menu menu = findMenuByMenuId(menuId);// 임시 로직
         Order order = getOrderByMember(member);
 //        Restaurant restaurant = restaurantService.findRestaurantById(restaurantId)
+        Restaurant restaurant = findRestaurantById(restaurantId);//임시 로직
 
         OrderMenu orderMenu = OrderMenu.builder()
-//                .resName(restaurant.getResName)
+                .resName(restaurant.getRestaurantName())
                 .order(order)
-//                .menu(menu)
+                .menu(menu)
                 .quantity(quantity)
-//                .totalPrice(menu.getPrice * quantity)
+                .totalPrice(menu.getPrice() * quantity)
                 .build();
+
         orderMenuRepository.save(orderMenu);
-//        order.updateTotalPrice(menu.getPrice * quantity);
+        order.updateTotalPrice(menu.getPrice() * quantity);
         return OrderResponseDto.fromEntity(order);
     }
 
