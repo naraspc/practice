@@ -4,11 +4,10 @@ import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.wallet.entity.Wallet;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class MemberRequestDto {
 
@@ -19,6 +18,7 @@ public class MemberRequestDto {
             regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$",
             message = "비밀번호는 알파벳 대소문자, 숫자, 특수문자를 모두 포함해야 합니다."
     )
+    @NonNull
     private String password;
     @NonNull
     private String nickName;
