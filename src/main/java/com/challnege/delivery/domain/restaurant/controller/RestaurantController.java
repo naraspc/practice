@@ -1,5 +1,5 @@
-package com.challnege.delivery.domain.restaurant.controller;
 
+package com.challnege.delivery.domain.restaurant.controller;
 
 public class RestaurantController {
 }

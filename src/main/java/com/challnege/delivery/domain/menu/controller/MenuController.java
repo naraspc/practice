@@ -1,30 +1,77 @@
 package com.challnege.delivery.domain.menu.controller;
 
 
+import com.challnege.delivery.domain.menu.dto.MenuImageResponseDto;
 import com.challnege.delivery.domain.menu.dto.MenuRequestDto;
 import com.challnege.delivery.domain.menu.dto.MenuResponseDto;
+import com.challnege.delivery.domain.menu.service.ImageS3Service;
 import com.challnege.delivery.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Slf4j
-@RestController
+@Controller
+@RequestMapping("/restaurant")
 @RequiredArgsConstructor
 public class MenuController {
+
     private final MenuService menuService;
+    private final ImageS3Service imageS3Service;
+
     // 메뉴 등록
-    @PostMapping("/restaurants/{restaurantsId}/menus")
-    public ResponseEntity<MenuResponseDto> createMenu(
+    @PostMapping("/{restaurantsId}/menus")
+    public String createMenu(
             @PathVariable Long restaurantsId,
             @RequestPart MultipartFile image,
-            @RequestPart MenuRequestDto menuRequestDto) {
-        return menuService.createMenu(restaurantsId, image, menuRequestDto);
+            @ModelAttribute MenuRequestDto menuRequestDto,
+            Model model) throws IOException {
+        String imageUrl = imageS3Service.saveFile(image);
+        MenuResponseDto menuResponseDto = menuService.createMenu(restaurantsId, imageUrl, menuRequestDto);
+        model.addAttribute("menuResponse", menuResponseDto);
+        return "menu";
+    }
+
+//    // 메뉴 조회 (검색한다면?)
+//    @GetMapping("/{restaurantsId}/menus")
+//    public String readAllMenu(@PathVariable Long restaurantsId) {
+//
+//    }
+
+    // 메뉴 수정 (메뉴 이름, 가격)
+    @PutMapping("/{restaurantsId}/menus/{menuId}")
+    public String updateMenu(
+            @PathVariable Long restaurantsId,
+            @PathVariable Long menuId,
+            @ModelAttribute MenuRequestDto menuRequestDto,
+            Model model) {
+        MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, menuRequestDto);
+        model.addAttribute("menuResponse", menuResponseDto);
+        return "menu";
+    }
+
+    // 메뉴 사진 수정
+    @PutMapping("/{restaurantsId}/menus/{menuId}/images")
+    public String updateMenuImage(
+            @PathVariable Long restaurantsId,
+            @PathVariable Long menuId,
+            @RequestPart MultipartFile image,
+            Model model) throws IOException {
+        String imageUrl = imageS3Service.saveFile(image);
+        MenuImageResponseDto menuImageResponseDto = menuService.updateMenuImage(restaurantsId, menuId, imageUrl);
+        model.addAttribute("menuImageResponse", menuImageResponseDto);
+        return "menu";
+    }
+
+    // 메뉴 삭제 (Delete는 서비스에서 안정성 문제가 있어서 고려해봐야함)
+    @DeleteMapping("/{restaurantsId}/menus/{menuId}")
+    public String deleteMenu(@PathVariable Long restaurantsId, @PathVariable Long menuId) {
+        menuService.deleteMenu(restaurantsId, menuId);
+        return "menu";
     }
 }
