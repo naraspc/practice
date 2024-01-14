@@ -2,6 +2,7 @@ package com.challnege.delivery.domain.member.dto;
 
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.member.entity.Role;
+import com.challnege.delivery.domain.wallet.entity.Wallet;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class MemberRequestDto {
     @NonNull
     private Role role;
 
-    public Member toEntity() {
+    public Member toEntity(Wallet wallet) {
         return Member.builder()
                 .email(this.email)
                 .password(this.password)
@@ -37,6 +38,7 @@ public class MemberRequestDto {
                 .phoneNumber(this.phoneNumber)
                 .address(this.address)
                 .role(this.role)
+                .wallet(wallet)
                 .build();
     }
 }
