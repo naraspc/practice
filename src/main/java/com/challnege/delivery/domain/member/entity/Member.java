@@ -22,7 +22,7 @@ public class Member extends Auditable {
 
     private String password;
 
-    private String NickName;
+    private String nickName;
 
     private String phoneNumber;
 
@@ -40,7 +40,7 @@ public class Member extends Auditable {
     public Member(String email, String password, String nickName, String phoneNumber, String address, Wallet wallet) {
         this.email = email;
         this.password = password;
-        this.NickName = nickName;
+        this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.wallet = wallet;
