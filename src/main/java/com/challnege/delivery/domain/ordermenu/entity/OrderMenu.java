@@ -1,5 +1,6 @@
 package com.challnege.delivery.domain.ordermenu.entity;
 
+import com.challnege.delivery.domain.menu.entity.Menu;
 import com.challnege.delivery.domain.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,9 +21,9 @@ public class OrderMenu {
     @JoinColumn(name = "order_id")
     private Order order;
 
-//    @ManyToOne
-//    @JoinColumn(name = "menu_id")
-//    private Menu menu;
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 
     private Long quantity;
 
@@ -31,10 +32,11 @@ public class OrderMenu {
     private Long totalPrice;
 
     @Builder
-    public OrderMenu(Order order, Long quantity, String resName, Long totalPrice) {
+    public OrderMenu(Order order, Long quantity, String resName, Long totalPrice, Menu menu) {
         this.order = order;
         this.quantity = quantity;
         this.resName = resName;
         this.totalPrice = totalPrice;
+        this.menu = menu;
     }
 }
