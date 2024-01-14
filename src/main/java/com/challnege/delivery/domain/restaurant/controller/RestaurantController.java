@@ -3,6 +3,7 @@ package com.challnege.delivery.domain.restaurant.controller;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantResponseDto;
 import com.challnege.delivery.domain.restaurant.service.RestaurantService;
+import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,4 +52,13 @@ import java.util.List;
                 return new ResponseEntity<>("Cannot delete restaurant", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+        @GetMapping("/search")
+        public String findRestaurantsByCategoryAndName(@RequestParam("category") Category category,
+                                                       @RequestParam("name") String name,
+                                                       Model model) {
+            List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantsByCategoryAndName(category, name);
+            model.addAttribute("restaurants", restaurants);
+            return "restaurantList";
+        }
+
     }

@@ -33,6 +33,10 @@ public class Restaurant {
 //    @JoinColumn(name = "menu_id")
 //    private Menu Menu;
 
+    @Column(name = "sales_of_month")
+    private int salesOfMonth;
+
+
     @Builder
     public Restaurant(long id, String restaurantName, String address, Category category, String resNumber) {
         this.id = id;
