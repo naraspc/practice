@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/restaurants/{restaurantsId}/orders")
+@RequestMapping("/restaurants/{restaurantId}/orders")
 public class OrderController {
 
     private final OrderService orderService;
