@@ -4,24 +4,32 @@ import com.challnege.delivery.domain.review.dto.ReviewRequestDto;
 import com.challnege.delivery.domain.review.dto.ReviewResponseDto;
 import com.challnege.delivery.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
+@RequestMapping("/reviews") // Set a base path for the controller
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/api/restaurants/{restaurantId}/reviews")
-    public ResponseEntity<ReviewResponseDto> postReview(@PathVariable Long restaurantId,
-                                                        @RequestBody ReviewRequestDto requestDto){
-        return reviewService.postReview(restaurantId,requestDto);
+    @PostMapping("/restaurants/{restaurantId}/reviews")
+    public String postReview(@PathVariable Long restaurantId,
+                             @ModelAttribute ReviewRequestDto requestDto,
+                             Model model) {
+        ReviewResponseDto responseDto = reviewService.postReview(restaurantId, requestDto);
+        model.addAttribute("reviewResponseDto", responseDto);
+        return "reviewResult"; // Return the view name
     }
 
-    @DeleteMapping("restauransts/{restaurantId}/reviews/{reviewId}")
-    public ResponseEntity<ReviewResponseDto> deleteReview(@PathVariable Long restaurantId,
-                             @PathVariable Long reviewId){
-        return reviewService.deleteReview(restaurantId,reviewId);
+    @DeleteMapping("/restaurants/{restaurantId}/reviews/{reviewId}")
+    public String deleteReview(@PathVariable Long restaurantId,
+                               @PathVariable Long reviewId,
+                               Model model) {
+        ReviewResponseDto responseDto = reviewService.deleteReview(restaurantId, reviewId);
+        model.addAttribute("reviewResponseDto", responseDto);
+        return "reviewResult"; // Return the view name
     }
 }

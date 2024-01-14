@@ -4,8 +4,10 @@ import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.review.entity.Review;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ReviewResponseDto {
     private Long reviewId;
     private Member member;
