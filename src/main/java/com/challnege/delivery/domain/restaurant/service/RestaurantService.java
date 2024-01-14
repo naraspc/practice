@@ -4,6 +4,7 @@ import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantResponseDto;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.repository.RestaurantRepository;
+import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,13 @@ public class RestaurantService {
 
         return RestaurantResponseDto.fromListRestaurantEntity(restaurants);
 
+    }
+
+    //Read by category and name
+    public List<RestaurantResponseDto> findRestaurantsByCategoryAndName(Category category, String name) {
+        List<Restaurant> restaurantsByCategoryAndName = restaurantRepository.findAllRestaurantsByRestaurantNameContainingAndCategory(name, category);
+
+        return RestaurantResponseDto.fromListRestaurantEntity(restaurantsByCategoryAndName);
     }
 
 
