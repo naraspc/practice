@@ -41,16 +41,10 @@ public class MemberController {
         return "member";
     }
 
-    @GetMapping("/delete/{memberId}")
-    public String showDeleteConfirmation(@PathVariable @Positive long memberId, Model model) {
-        model.addAttribute("memberId", memberId);
-        return "redirect:/members/signup";
-    }
-
-    @PostMapping("/delete/{memberId}")
+    @DeleteMapping("/delete/{memberId}")
     public String deleteMember(@PathVariable @Positive long memberId) {
         memberService.deleteMember(memberId);
         // 여기서 적절한 리다이렉션을 수행하거나 다른 동작을 수행할 수 있습니다.
-        return "redirect:/members";
+        return "redirect:/index";
     }
 }
