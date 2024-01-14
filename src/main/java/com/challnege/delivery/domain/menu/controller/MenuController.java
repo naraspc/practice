@@ -37,12 +37,6 @@ public class MenuController {
         return "menu";
     }
 
-//    // 메뉴 조회 (검색한다면?)
-//    @GetMapping("/{restaurantsId}/menus")
-//    public String readAllMenu(@PathVariable Long restaurantsId) {
-//
-//    }
-
     // 메뉴 수정 (메뉴 이름, 가격)
     @PutMapping("/{restaurantsId}/menus/{menuId}")
     public String updateMenu(
