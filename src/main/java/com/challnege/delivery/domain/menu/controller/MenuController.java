@@ -24,17 +24,23 @@ public class MenuController {
     private final MenuService menuService;
     private final ImageS3Service imageS3Service;
 
+    // 메뉴 화면
+    @GetMapping("/{restaurantsId}")
+    public String menuHome() {
+        return "menu";
+    }
+
     // 메뉴 등록
     @PostMapping("/{restaurantsId}/menus")
     public String createMenu(
-            @PathVariable Long restaurantsId,
+            @PathVariable Long restaurantsId, // RequestParam 고려해볼것
             @RequestPart MultipartFile image,
             @ModelAttribute MenuRequestDto menuRequestDto,
             Model model) throws IOException {
         String imageUrl = imageS3Service.saveFile(image);
         MenuResponseDto menuResponseDto = menuService.createMenu(restaurantsId, imageUrl, menuRequestDto);
         model.addAttribute("menuResponse", menuResponseDto);
-        return "menu";
+        return "menu"; // redirect html 만들어지면 싹 정리
     }
 
     // 메뉴 수정 (메뉴 이름, 가격)
