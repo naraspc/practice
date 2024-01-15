@@ -27,15 +27,12 @@ public class OrderMenu {
 
     private Long quantity;
 
-    private String resName;
-
     private Long totalPrice;
 
     @Builder
-    public OrderMenu(Order order, Long quantity, String resName, Long totalPrice, Menu menu) {
+    public OrderMenu(Order order, Long quantity, Long totalPrice, Menu menu) {
         this.order = order;
         this.quantity = quantity;
-        this.resName = resName;
         this.totalPrice = totalPrice;
         this.menu = menu;
     }

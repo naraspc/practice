@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,10 +31,11 @@ public class Member extends Auditable {
 
     private String address;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "member")
-    private List<Order> orderList;
+    private List<Order> orderList = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, String nickName, String phoneNumber, String address, Role role) {
