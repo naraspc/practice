@@ -15,12 +15,15 @@ public class OrderResponseDto {
     private Long totalPrice;
     private Status status;//enum으로 할 지 고민
 
+    private String resName;
+
 
     @Builder
-    public OrderResponseDto(List<OrderMenu> orderMenuList, Long totalPrice, Status status) {
+    public OrderResponseDto(List<OrderMenu> orderMenuList, Long totalPrice, Status status, String resName) {
         this.orderMenuList = orderMenuList;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.resName = resName;
     }
 
     public static OrderResponseDto fromEntity(Order order) {
@@ -28,6 +31,7 @@ public class OrderResponseDto {
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
+                .resName(order.getResName())
                 .build();
     }
 }

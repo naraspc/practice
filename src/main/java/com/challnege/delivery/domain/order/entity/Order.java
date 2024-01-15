@@ -29,6 +29,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private String resName;
+
     @OneToMany(mappedBy = "order")
     private List<OrderMenu> orderMenuList = new ArrayList<>();
 
@@ -42,5 +44,17 @@ public class Order {
 
     public void updateTotalPrice(long price) {
         this.totalPrice += price;
+    }
+
+    public void makeOnDelivery() {
+        this.status = Status.ON_DELIVERY;
+    }
+
+    public void makeOnComplete() {
+        this.status = Status.COMPLETED;
+    }
+
+    public void setResName(String resName) {
+        this.resName = resName;
     }
 }
