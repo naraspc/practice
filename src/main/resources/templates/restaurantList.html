@@ -1,84 +1,54 @@
-<!-- resources/templates/restaurantList.html -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .index-header {
+            background-color: #adb5bd;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .search-bar {
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .restaurant-item {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .restaurant-item:hover {
+            background-color: #ced4da;
+        }
+    </style>
+
 </head>
 <body>
-<h1>Restaurant List</h1>
-
-<!-- 추가된 부분 -->
-<form th:action="@{/restaurants/search}" method="get">
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="category" required>
-
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-
-    <button type="submit">Search</button>
-</form>
-<!-- 끝 -->
-
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Restaurant Name</th>
-        <th>Category</th>
-        <th>Address</th>
-        <th>Restaurant Number</th>
-        <th>Menu</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="restaurant : ${restaurants}">
-        <td th:text="${restaurant.id}"></td>
-        <td th:text="${restaurant.restaurantName}"></td>
-        <td th:text="${restaurant.category}"></td>
-        <td th:text="${restaurant.address}"></td>
-        <td th:text="${restaurant.resNumber}"></td>
-        <td>
-            <ul>
-                <li th:each="menu : ${restaurant.menu}">
-                    <span th:text="${menu.foodName}"></span>
-                </li>
-            </ul>
-        </td>
-        <td>
-            <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">View</a>
-
-            <a href="#" th:onclick="'deleteRestaurant(' + ${restaurant.id} + '); return false;'">Delete</a>
-            <script>
-                function deleteRestaurant(restaurantId) {
-                    if (confirm('Are you sure?')) {
-                        fetch(`/restaurants/${restaurantId}/delete`, {
-                            method: 'DELETE'
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    alert('Restaurant deleted successfully');
-                                    // 여기서 추가적인 처리 또는 페이지 새로고침 등을 할 수 있습니다.
-                                } else {
-                                    alert('Cannot delete restaurant');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error deleting restaurant:', error);
-                                alert('Error deleting restaurant');
-                            });
-                    }
-                }
-            </script>
-            <!-- 추가된 부분 -->
-            <a th:href="@{/restaurant/{id}(id=${restaurant.id})}">Add Menu</a>
-
-            <!-- 끝 -->
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="container mt-4">
+    <div class="index-header text-center">
+        <h1>메인페이지(index)</h1>
+    </div>
+    <div class="search-bar">
+        <input class="form-control" type="text" placeholder="검색어" aria-label="Search">
+        <button class="btn btn-outline-secondary" type="button">검색</button>
+    </div>
+    <div th:each="restaurant : ${restaurants}" class="restaurant-item">
+        <h2 th:text="${restaurant.restaurantName}">Restaurant Name</h2>
+        <p th:text="${restaurant.address}">Address</p>
+        <p th:text="${'Category: ' + restaurant.category}">Category</p>
+        <p th:text="${'Tel: ' + restaurant.resNumber}">Phone Number</p>
+        <a th:href="@{'/restaurants/' + ${restaurant.id}}" class="btn btn-primary">메뉴 보기!</a>
+        <a th:href="@{'/restaurant/' + ${restaurant.id}}" class="btn btn-primary">메뉴 추가하기!</a>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

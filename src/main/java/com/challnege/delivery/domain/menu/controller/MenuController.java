@@ -27,7 +27,7 @@ public class MenuController {
     // 메뉴 화면
     @GetMapping("/{restaurantsId}")
     public String menuHome(@PathVariable Long restaurantsId, Model model) {
-        model.addAttribute("restaurantsId", restaurantsId);
+        model.addAttribute("restaurantsId",restaurantsId);
         return "menu";
     }
 
