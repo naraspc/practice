@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restaurant and Menu Test Page</title>
+</head>
+<body>
+
+<h2>Restaurant and Menu Information</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Restaurant ID</th>
+        <th>Restaurant Name</th>
+        <th>Address</th>
+        <th>Category</th>
+        <th>Menu Items</th>
+        <th>Sales of Month</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="restaurants : ${restaurant}">
+        <td th:text="${restaurant.id}"></td>
+        <td th:text="${restaurant.restaurantName}"></td>
+        <td th:text="${restaurant.address}"></td>
+        <td th:text="${restaurant.category}"></td>
+        <td>
+            <ul>
+                <li th:each="menu : ${restaurant.menu}" th:text="${menu.foodName + ' - ' + menu.price}"></li>
+            </ul>
+        </td>
+        <td th:text="${restaurant.salesOfMonth}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
