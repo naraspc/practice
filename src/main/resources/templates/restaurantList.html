@@ -29,6 +29,7 @@
         <th>Category</th>
         <th>Address</th>
         <th>Restaurant Number</th>
+        <th>Menu</th> <!-- 추가된 부분 -->
         <th>Actions</th>
     </tr>
     </thead>
@@ -39,6 +40,15 @@
         <td th:text="${restaurant.category}"></td>
         <td th:text="${restaurant.address}"></td>
         <td th:text="${restaurant.resNumber}"></td>
+        <td>
+            <!-- 추가된 부분 -->
+            <ul>
+                <li th:each="menu : ${restaurant.menu}">
+                    <span th:text="${menu.menuName}"></span>
+                </li>
+            </ul>
+            <!-- 끝 -->
+        </td>
         <td>
             <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">View</a>
             <a th:href="@{/restaurants/{id}/delete(id=${restaurant.id})}" onclick="return confirm('Are you sure?')">Delete</a>

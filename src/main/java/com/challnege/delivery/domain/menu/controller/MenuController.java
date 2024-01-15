@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class MenuController {
     private final MenuService menuService;
 
     // 메뉴 등록
+
     @PostMapping("/{restaurantsId}/menus")
     public ResponseEntity<MenuResponseDto> createMenu(
             @PathVariable Long restaurantsId,
@@ -30,6 +32,8 @@ public class MenuController {
         MenuResponseDto menuResponseDto = menuService.createMenu(restaurantsId, image, menuRequestDto);
         return ResponseEntity.ok(menuResponseDto);
     }
+
+
 
     // 메뉴 전체 조회
     @GetMapping("/{restaurantsId}/menus")
