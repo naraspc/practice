@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,9 +34,8 @@ public class Member extends Auditable {
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @OneToMany(mappedBy = "member")
+    private List<Order> orderList;
 
     @Builder
     public Member(String email, String password, String nickName, String phoneNumber, String address, Wallet wallet) {
