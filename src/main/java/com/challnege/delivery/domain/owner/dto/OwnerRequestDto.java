@@ -28,8 +28,6 @@ public class OwnerRequestDto {
     private String phoneNumber;
     @NonNull
     private String address;
-    @NonNull
-    private Role role;
 
     public Owner toEntity() {
         return Owner.builder()
@@ -38,7 +36,6 @@ public class OwnerRequestDto {
                 .ownerName(this.ownerName)
                 .phoneNumber(this.phoneNumber)
                 .address(this.address)
-                .role(this.role)
                 .build();
     }
 }

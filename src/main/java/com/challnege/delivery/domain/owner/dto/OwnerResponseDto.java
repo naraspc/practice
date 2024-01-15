@@ -13,7 +13,6 @@ public class OwnerResponseDto {
     private String ownerName;
     private String phoneNumber;
     private String address;
-    private Role role;
 
     @Builder
     public OwnerResponseDto(long memberId, String email, String ownerName, String phoneNumber, String address, Role role) {
@@ -22,7 +21,6 @@ public class OwnerResponseDto {
         this.ownerName = ownerName;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.role = role;
     }
 
     public static OwnerResponseDto fromEntity(Owner owner) {
@@ -32,7 +30,6 @@ public class OwnerResponseDto {
                 .ownerName(owner.getOwnerName())
                 .phoneNumber(owner.getPhoneNumber())
                 .address(owner.getAddress())
-                .role(owner.getRole())
                 .build();
     }
 }
