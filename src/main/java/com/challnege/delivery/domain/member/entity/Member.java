@@ -1,7 +1,6 @@
 package com.challnege.delivery.domain.member.entity;
 
 import com.challnege.delivery.domain.order.entity.Order;
-import com.challnege.delivery.domain.wallet.entity.Wallet;
 import com.challnege.delivery.global.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -31,20 +30,18 @@ public class Member extends Auditable {
 
     private String address;
 
-    @OneToOne
-    @JoinColumn(name = "wallet_id")
-    private Wallet wallet;
+    private Role role;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orderList;
 
     @Builder
-    public Member(String email, String password, String nickName, String phoneNumber, String address, Wallet wallet) {
+    public Member(String email, String password, String nickName, String phoneNumber, String address, Role role) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.wallet = wallet;
+        this.role = role;
     }
 }

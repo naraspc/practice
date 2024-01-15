@@ -3,7 +3,6 @@ package com.challnege.delivery.domain.member.dto;
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.member.entity.Role;
 import com.challnege.delivery.domain.order.entity.Order;
-import com.challnege.delivery.domain.wallet.entity.Wallet;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,19 +16,18 @@ public class MemberResponseDto {
     private String nickName;
     private String phoneNumber;
     private String address;
-    private long point;
-
+    private Role role;
     private List<Order> orderList;
 
     @Builder
-    public MemberResponseDto(long memberId, String email, String nickName, String phoneNumber, String address, Long point, List<Order> orderList) {
+    public MemberResponseDto(long memberId, String email, String nickName, String phoneNumber, String address, List<Order> orderList, Role role) {
         this.memberId = memberId;
         this.email = email;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.point = point;
         this.orderList = orderList;
+        this.role = role;
     }
 
     public static MemberResponseDto fromEntity(Member member) {
@@ -39,8 +37,8 @@ public class MemberResponseDto {
                 .nickName(member.getNickName())
                 .phoneNumber(member.getPhoneNumber())
                 .address(member.getAddress())
-                .point(member.getWallet().getPoint())
                 .orderList(member.getOrderList())
+                .role(member.getRole())
                 .build();
     }
 }
