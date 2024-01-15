@@ -2,6 +2,7 @@ package com.challnege.delivery.domain.restaurant.entity;
 
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.menu.entity.Menu;
+import com.challnege.delivery.domain.review.entity.Review;
 import com.challnege.delivery.global.audit.Category;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -37,6 +38,9 @@ public class Restaurant {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Review> reviews;
 
     @Column()
     private int salesOfMonth;
