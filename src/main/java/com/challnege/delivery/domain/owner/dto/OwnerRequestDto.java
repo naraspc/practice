@@ -1,17 +1,18 @@
-package com.challnege.delivery.domain.member.dto;
+package com.challnege.delivery.domain.owner.dto;
 
-import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.member.entity.Role;
-import com.challnege.delivery.domain.wallet.entity.Wallet;
+import com.challnege.delivery.domain.owner.entity.Owner;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
-public class MemberRequestDto {
+public class OwnerRequestDto {
 
     @Email
     @NonNull
@@ -22,23 +23,19 @@ public class MemberRequestDto {
     )
     private String password;
     @NonNull
-    private String nickName;
+    private String ownerName;
     @NonNull
     private String phoneNumber;
     @NonNull
     private String address;
-    @NonNull
-    private Role role;
 
-    public Member toEntity(Wallet wallet) {
-        return Member.builder()
+    public Owner toEntity() {
+        return Owner.builder()
                 .email(this.email)
                 .password(this.password)
-                .nickName(this.nickName)
+                .ownerName(this.ownerName)
                 .phoneNumber(this.phoneNumber)
                 .address(this.address)
-                .role(this.role)
-                .wallet(wallet)
                 .build();
     }
 }

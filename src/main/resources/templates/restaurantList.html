@@ -1,0 +1,60 @@
+<!-- resources/templates/restaurantList.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant List</title>
+</head>
+<body>
+<h1>Restaurant List</h1>
+
+<!-- 추가된 부분 -->
+<form th:action="@{/restaurants/search}" method="get">
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" required>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <button type="submit">Search</button>
+</form>
+<!-- 끝 -->
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Restaurant Name</th>
+        <th>Category</th>
+        <th>Address</th>
+        <th>Restaurant Number</th>
+        <th>Menu</th> <!-- 추가된 부분 -->
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="restaurant : ${restaurants}">
+        <td th:text="${restaurant.id}"></td>
+        <td th:text="${restaurant.restaurantName}"></td>
+        <td th:text="${restaurant.category}"></td>
+        <td th:text="${restaurant.address}"></td>
+        <td th:text="${restaurant.resNumber}"></td>
+        <td>
+            <!-- 추가된 부분 -->
+            <ul>
+                <li th:each="menu : ${restaurant.menu}">
+                    <span th:text="${menu.foodName}"></span>
+                </li>
+            </ul>
+            <!-- 끝 -->
+        </td>
+        <td>
+            <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">View</a>
+            <a th:href="@{/restaurants/{id}/delete(id=${restaurant.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
