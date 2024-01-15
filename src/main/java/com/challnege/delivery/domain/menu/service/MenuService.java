@@ -27,7 +27,6 @@ public class MenuService {
     public MenuResponseDto createMenu(Long restaurantsId, String imageUrl, MenuRequestDto menuRequestDto) {
         Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
                 () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
-
         Menu menu = new Menu(restaurant, imageUrl, menuRequestDto);
         Menu createMenu = menuRepository.save(menu);
         return new MenuResponseDto(createMenu);

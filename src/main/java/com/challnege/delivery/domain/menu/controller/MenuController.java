@@ -24,14 +24,16 @@ public class MenuController {
     private final MenuService menuService;
     private final ImageS3Service imageS3Service;
 
-//    // 메뉴 화면
-//    @GetMapping("/{restaurantsId}")
-//    public String menuHome() {
-//        return "menu";
-//    }
+    // 메뉴 화면
+    @GetMapping("/{restaurantsId}")
+    public String menuHome(
+            @PathVariable Long restaurantsId,
+            Model model) {
+        model.addAttribute("restaurantsId", restaurantsId);
+        return "menu";
+    }
 
     // 메뉴 등록
-
     @PostMapping("/{restaurantsId}/menus")
     public String createMenu(
             @PathVariable Long restaurantsId, // RequestParam 고려해볼것
@@ -46,7 +48,7 @@ public class MenuController {
 
 
     // 메뉴 수정 (메뉴 이름, 가격)
-    @PutMapping("/{restaurantsId}/menus/{menuId}")
+    @PatchMapping("/{restaurantsId}/menus/{menuId}")
     public String updateMenu(
             @PathVariable Long restaurantsId,
             @PathVariable Long menuId,
@@ -59,7 +61,7 @@ public class MenuController {
     }
 
     // 메뉴 사진 수정
-    @PutMapping("/{restaurantsId}/menus/{menuId}/images")
+    @PatchMapping("/{restaurantsId}/menus/{menuId}/images")
     public String updateMenuImage(
             @PathVariable Long restaurantsId,
             @PathVariable Long menuId,
