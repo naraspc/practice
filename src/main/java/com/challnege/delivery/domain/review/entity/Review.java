@@ -41,8 +41,11 @@ public class Review {
 //    private List<Review> reviews;
 
     public Review(Restaurant restaurant, Member member, ReviewRequestDto requestDto) {
-        this.member = member;
+        if (restaurant == null || member == null) {
+            throw new IllegalArgumentException("Restaurant and Member must not be null.");
+        }
         this.restaurant = restaurant;
+        this.member = member;
         this.nickname = requestDto.getNickname();
         this.content = requestDto.getContent();
         this.rating = requestDto.getRating();
