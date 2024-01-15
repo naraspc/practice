@@ -25,8 +25,6 @@ public class Owner {
 
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     @Builder
     public Owner(String email, String password, String ownerName, String phoneNumber, String address, Role role) {
@@ -35,6 +33,5 @@ public class Owner {
         this.ownerName = ownerName;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.role = role;
     }
 }

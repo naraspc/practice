@@ -7,9 +7,11 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/owners")
 @RequiredArgsConstructor
 public class OwnerController {
@@ -17,20 +19,22 @@ public class OwnerController {
     private final OwnerService ownerService;
 
     @PostMapping
-    public ResponseEntity<OwnerResponseDto> createOwner(@RequestBody OwnerRequestDto requestDto){
+    public String createOwner(@ModelAttribute OwnerRequestDto requestDto, Model model) {
         OwnerResponseDto ownerResponseDto = ownerService.createOwner(requestDto);
-        return new ResponseEntity<>(ownerResponseDto, HttpStatus.CREATED);
+        model.addAttribute("ownerResponseDto", ownerResponseDto);
+        return "ownerCreated";  // 뷰의 이름, 필요에 따라 수정
     }
 
     @GetMapping("/{ownerId}")
-    public ResponseEntity<OwnerResponseDto> readOwner(@PathVariable("{OwnerId}") long ownerId) {
+    public String readOwner(@PathVariable long ownerId, Model model) {
         OwnerResponseDto ownerResponseDto = ownerService.readOwner(ownerId);
-        return new ResponseEntity<>(ownerResponseDto, HttpStatus.OK);
+        model.addAttribute("ownerResponseDto", ownerResponseDto);
+        return "ownerDetails";  // 뷰의 이름, 필요에 따라 수정
     }
 
     @DeleteMapping("/{ownerId}")
-    public ResponseEntity deleteOwner(@PathVariable @Positive long ownerId) {
+    public String deleteOwner(@PathVariable @Positive long ownerId) {
         ownerService.deleteOwner(ownerId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return "redirect:/owners";  // 삭제 후 리다이렉트할 경로, 필요에 따라 수정
     }
 }
