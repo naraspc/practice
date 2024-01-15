@@ -76,7 +76,8 @@ public class MenuService {
         menuRepository.delete(menu);
     }
 
-    private Menu findMenuById(Long menuId) {
+    @Transactional(readOnly = true)
+    public Menu findMenuById(Long menuId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(
                 () -> new NoSuchElementException("메뉴를 찾을 수 없습니다."));
         return menu;
