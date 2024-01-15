@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -51,5 +54,12 @@ public class ReviewService {
         reviewRepository.delete(review);
 
         return new ReviewResponseDto(review);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewResponseDto> readAllReview(Long restaurantsId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
+                () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
+        return reviewRepository.findAllByRestaurant(restaurant).stream().map(ReviewResponseDto::new).toList();
     }
 }
