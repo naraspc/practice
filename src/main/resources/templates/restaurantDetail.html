@@ -32,6 +32,15 @@
                     <!-- 메뉴 이미지 표시 -->
                     <img th:src="${menu.imageUrl}" alt="Menu Image" width="100" height="100"/>
 
+                    <form th:action="@{'/restaurants/' + ${restaurant.id} + '/orders/' + ${menu.id}}" method="post">
+                        <label for="quantity">수량:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+                        <label for="memberId">멤버아이디(임시):</label>
+                        <input type="number" id="memberId" name="memberId" value="0" required>
+                        <input type="hidden" name="restaurantId" value="${restaurant.id}">
+                        <input type="hidden" name="menuId" value="${menu.id}">
+                        <button type="submit">담기</button>
+                    </form>
                 </li>
             </ul>
         </td>

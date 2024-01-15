@@ -20,7 +20,7 @@ public class OrderController {
                               @RequestParam long quantity,
                               @RequestParam long memberId) {
         OrderResponseDto orderResponseDto = orderService.addToOrder(restaurantId, menuId, quantity, memberId);
-        return "redirect:/restaurants/{restaurantId}" + restaurantId;
+        return "redirect:/restaurants/" + restaurantId;
     }
 
     @GetMapping("/{memberId}")//시큐리티 적용 후 path삭제 후 principal로 조회

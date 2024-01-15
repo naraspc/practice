@@ -44,7 +44,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponseDto readCurrentOrder(long memberId) {
         memberService.isMemberExist(memberId);
-        Order order = findOrderByMemberId(memberId);
+        Order order = findBeforeOrderById(memberId);
         return OrderResponseDto.fromEntity(order);
     }
 
@@ -87,7 +87,7 @@ public class OrderService {
     }
 
     private Order getOrderByMember(Member member) {
-        Order order = orderRepository.findByMember_MemberId(member.getMemberId())
+        Order order = orderRepository.findBeforeOrderById(member.getMemberId())
                 .orElseGet(()-> {
                     Order newOrder = Order.builder()
                             .member(member)
@@ -99,8 +99,8 @@ public class OrderService {
         return order;
     }
 
-    public Order findOrderByMemberId(long memberId) {
-        Optional<Order> optionalOrder = orderRepository.findByMember_MemberId(memberId);
+    public Order findBeforeOrderById(long memberId) {
+        Optional<Order> optionalOrder = orderRepository.findBeforeOrderById(memberId);
         Order order = optionalOrder.orElseThrow(() -> new NullPointerException("주문 사항이 없습니다"));
         return order;
 
