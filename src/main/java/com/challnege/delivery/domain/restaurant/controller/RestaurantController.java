@@ -44,7 +44,7 @@ import java.util.List;
             return "restaurantList";
         }
 
-        @PostMapping("/{id}/delete")
+        @DeleteMapping("/{id}/delete")
         public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
             if (restaurantService.deleteRestaurant(id)) {
                 return new ResponseEntity<>("Restaurant deleted successfully", HttpStatus.OK);

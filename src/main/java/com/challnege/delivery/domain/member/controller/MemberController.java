@@ -22,7 +22,11 @@ public class MemberController {
         return new ResponseEntity<>(memberResponseDto, HttpStatus.CREATED);
     }
 
-
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberResponseDto> readMember(@PathVariable("{memberId}") long memberId) {
+        MemberResponseDto memberResponseDto = memberService.readMember(memberId);
+        return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
+    }
 
     @DeleteMapping("/{memberId}")
     public ResponseEntity deleteMember(@PathVariable @Positive long memberId) {
