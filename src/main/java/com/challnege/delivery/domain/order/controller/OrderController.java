@@ -23,8 +23,10 @@ public class OrderController {
         return "redirect:/restaurants/" + restaurantId;
     }
 
-    @GetMapping("/{memberId}")//시큐리티 적용 후 path삭제 후 principal로 조회
-    public String readCurrentOrder(@PathVariable("memberId") long memberId, Model model) {
+    @GetMapping//("/{memberId}")//시큐리티 적용 후 path삭제 후 principal로 조회
+    public String readCurrentOrder(@RequestParam long memberId,
+//            @PathVariable("memberId") long memberId,
+                                   Model model) {
         OrderResponseDto orderResponseDto = orderService.readCurrentOrder(memberId);
         model.addAttribute("orderResponseDto", orderResponseDto);
         return "orders";//responseEntity로 뿌림?
@@ -33,8 +35,10 @@ public class OrderController {
     @PatchMapping("/{orderId}")
     public String makeOrder(@PathVariable("restaurantId") long restaurantId,
                             @PathVariable("orderId") long orderId,
-                            @RequestParam long memberId, Model model) {
+                            @RequestParam long memberId,
+                            Model model) {
         OrderResponseDto orderResponseDto = orderService.makeOrder(orderId, memberId);
-        return "orders";
+        model.addAttribute("orderResponseDto", orderResponseDto);
+        return "member";
     }
 }

@@ -42,10 +42,16 @@
         <p>Total Price: <span th:text="${orderResponseDto.totalPrice}"></span></p>
 
         <!-- Form to make an order -->
-        <form action="/restaurants/{restaurantId}/orders/{orderId}" method="patch">
-          <input type="hidden" name="memberId" th:value="${memberId}" />
+        <form action="/restaurants/{restaurantId}/orders/{orderId}" method="post">
+          <input type="hidden" name="_method" value="patch">
+          <div class="mb-3">
+            <label for="memberIdInput" class="form-label">Member ID:</label>
+            <input type="text" class="form-control" id="memberIdInput" name="memberId" th:value="${memberId}" />
+          </div>
+
           <button type="submit" class="btn btn-primary">Make Order</button>
         </form>
+
 
       </div>
       <div th:unless="${orderResponseDto != null}">
