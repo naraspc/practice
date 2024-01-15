@@ -39,6 +39,16 @@ public class OrderController {
                             Model model) {
         OrderResponseDto orderResponseDto = orderService.makeOrder(orderId, memberId);
         model.addAttribute("orderResponseDto", orderResponseDto);
-        return "member";
+        return "index";
+    }
+
+    @PatchMapping("/owner/{orderId}")
+    public String completeOrder(@PathVariable("restaurantId") long restaurantId,
+                            @PathVariable("orderId") long orderId,
+                            @RequestParam long memberId,
+                            Model model) {
+        OrderResponseDto orderResponseDto = orderService.completeOrder(orderId, memberId);
+        model.addAttribute("orderResponseDto", orderResponseDto);
+        return "index";
     }
 }

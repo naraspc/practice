@@ -3,6 +3,7 @@ package com.challnege.delivery.domain.member.dto;
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.member.entity.Role;
 import com.challnege.delivery.domain.order.entity.Order;
+import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import lombok.Builder;
 import lombok.Getter;
 

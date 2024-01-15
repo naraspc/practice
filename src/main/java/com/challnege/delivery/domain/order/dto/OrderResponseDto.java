@@ -3,6 +3,7 @@ package com.challnege.delivery.domain.order.dto;
 import com.challnege.delivery.domain.order.entity.Order;
 import com.challnege.delivery.domain.order.entity.Status;
 import com.challnege.delivery.domain.ordermenu.entity.OrderMenu;
+import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,13 +28,21 @@ public class OrderResponseDto {
         this.restaurantNumber = restaurantNumber;
     }
 
-    public static OrderResponseDto fromEntity(Order order) {
+    public static OrderResponseDto fromEntity(Order order, Restaurant restaurant) {
         return OrderResponseDto.builder()
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
-                .restaurantName(order.getRestaurant().getRestaurantName())
-                .restaurantNumber(order.getRestaurant().getResNumber())
+                .restaurantName(restaurant.getRestaurantName())
+                .restaurantNumber(restaurant.getResNumber())
+                .build();
+    }
+
+    public static OrderResponseDto fromEntityByOwner(Order order) {
+        return OrderResponseDto.builder()
+                .orderMenuList(order.getOrderMenuList())
+                .totalPrice(order.getTotalPrice())
+                .status(order.getStatus())
                 .build();
     }
 }

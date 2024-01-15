@@ -52,7 +52,7 @@ public class OrderService {
     public OrderResponseDto readCurrentOrder(long memberId) {
         memberService.isMemberExist(memberId);
         Order order = findBeforeOrderById(memberId);
-        return OrderResponseDto.fromEntity(order);
+        return OrderResponseDto.fromEntityByOwner(order);
     }
 
 
@@ -62,7 +62,7 @@ public class OrderService {
         Member member = memberService.findMemberById(memberId);
         Menu menu = findMenuByMenuId(menuId);// 임시 로직
         Order order = getOrderByMember(member);
-        isExistingRes(restaurantId);//임시 로직
+        Restaurant restaurant = findRestaurantById(restaurantId);//임시 로직
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .order(order)
@@ -72,8 +72,9 @@ public class OrderService {
                 .build();
 
         orderMenuRepository.save(orderMenu);
+        order.updateRestaurant(restaurant);
         order.updateTotalPrice(menu.getPrice() * quantity);
-        return OrderResponseDto.fromEntity(order);
+        return OrderResponseDto.fromEntity(order, restaurant);
     }
 
 
@@ -83,7 +84,17 @@ public class OrderService {
 
         order.makeOnDelivery();
 
-        return OrderResponseDto.fromEntity(order);
+        return OrderResponseDto.fromEntityByOwner(order);
+    }
+
+    public OrderResponseDto completeOrder(long orderId, long memberId) {
+        Order order = findOrderByOrderId(orderId);
+        memberService.isMemberExist(memberId);
+
+        order.makeOnComplete();
+
+        return OrderResponseDto.fromEntityByOwner(order);
+
     }
 
     private Order getOrderByMember(Member member) {

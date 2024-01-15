@@ -1,5 +1,8 @@
 package com.challnege.delivery.domain.restaurant.service;
 
+import com.challnege.delivery.domain.member.entity.Member;
+import com.challnege.delivery.domain.member.repository.MemberRepository;
+import com.challnege.delivery.domain.member.service.MemberService;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantResponseDto;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
@@ -16,10 +19,14 @@ import java.util.Optional;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final MemberService memberService;
 
     //Create
-    public RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurantRequestDto) {
+    public RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurantRequestDto, long memberId) {
+        Member member = memberService.findMemberById(memberId);
+
         Restaurant restaurant = Restaurant.builder()
+                .member(member)
                 .restaurantName(restaurantRequestDto.getRestaurantName())
                 .category(restaurantRequestDto.getCategory())
                 .address(restaurantRequestDto.getAddress())

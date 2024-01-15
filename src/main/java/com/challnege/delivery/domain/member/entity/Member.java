@@ -1,6 +1,7 @@
 package com.challnege.delivery.domain.member.entity;
 
 import com.challnege.delivery.domain.order.entity.Order;
+import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.global.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -37,8 +38,12 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Restaurant> restaurantList = new ArrayList<>();
+
     @Builder
-    public Member(String email, String password, String nickName, String phoneNumber, String address, Role role) {
+    public Member(List<Restaurant> restaurantList, String email, String password, String nickName, String phoneNumber, String address, Role role) {
+        this.restaurantList = restaurantList;
         this.email = email;
         this.password = password;
         this.nickName = nickName;

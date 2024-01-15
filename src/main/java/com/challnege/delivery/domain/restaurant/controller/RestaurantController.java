@@ -24,9 +24,12 @@ import java.util.List;
         public String showRestaurantForm() {
             return "restaurantForm";
         }
+
+
         @PostMapping
-        public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto) {
-            restaurantService.createRestaurant(restaurantRequestDto);
+        public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
+                                                       @RequestParam long memberId) {
+            restaurantService.createRestaurant(restaurantRequestDto, memberId);
             return new ResponseEntity<>("Restaurant created successfully", HttpStatus.OK);
         }
 

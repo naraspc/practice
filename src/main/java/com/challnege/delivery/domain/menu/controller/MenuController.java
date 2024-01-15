@@ -57,6 +57,7 @@ public class MenuController {
             Model model) {
         MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, menuRequestDto);
         model.addAttribute("menuResponse", menuResponseDto);
+
         return "menu";
     }
 

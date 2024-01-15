@@ -56,4 +56,8 @@ public class Order {
     public void makeOnComplete() {
         this.status = Status.COMPLETED;
     }
+
+    public void updateRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 }
