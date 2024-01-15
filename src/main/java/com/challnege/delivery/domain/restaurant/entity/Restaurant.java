@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -28,10 +30,16 @@ public class Restaurant {
     @Column(nullable = false)
     private String resNumber;
 
-//
-//    @OneToMany(FetchType.LAZY)
-//    @JoinColumn(name = "menu_id")
-//    private Menu Menu;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Menu> Menu;
+
+ /*   @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Owner owner;*/
+
+    @Column()
+    private int salesOfMonth;
+
 
     @Builder
     public Restaurant(long id, String restaurantName, String address, Category category, String resNumber) {
