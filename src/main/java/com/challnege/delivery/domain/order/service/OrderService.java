@@ -40,6 +40,13 @@ public class OrderService {
         Restaurant restaurant = optionalRestaurant.orElseThrow(() -> new NullPointerException("식당 없음"));
         return restaurant;
     }
+
+    private void isExistingRes(long restaurantId) {
+        boolean isExist = restaurantRepository.existsById(restaurantId);
+        if (!isExist) {
+            throw new NullPointerException("존재하지 않는 식당입니다.");
+        }
+    }
     //-------------------------------------------------------------------------//
     @Transactional(readOnly = true)
     public OrderResponseDto readCurrentOrder(long memberId) {
@@ -53,14 +60,11 @@ public class OrderService {
 
     public OrderResponseDto addToOrder(long restaurantId, long menuId, long quantity, long memberId) {
         Member member = memberService.findMemberById(memberId);
-//        Menu menu = menuService.findMenuById(menuId);
         Menu menu = findMenuByMenuId(menuId);// 임시 로직
         Order order = getOrderByMember(member);
-//        Restaurant restaurant = restaurantService.findRestaurantById(restaurantId)
-        Restaurant restaurant = findRestaurantById(restaurantId);//임시 로직
+        isExistingRes(restaurantId);//임시 로직
 
         OrderMenu orderMenu = OrderMenu.builder()
-                .resName(restaurant.getRestaurantName())
                 .order(order)
                 .menu(menu)
                 .quantity(quantity)
@@ -69,18 +73,14 @@ public class OrderService {
 
         orderMenuRepository.save(orderMenu);
         order.updateTotalPrice(menu.getPrice() * quantity);
-        order.setResName(restaurant.getRestaurantName());
         return OrderResponseDto.fromEntity(order);
     }
 
 
     public OrderResponseDto makeOrder(long orderId, long memberId) {
         Order order = findOrderByOrderId(orderId);
-        Member member = memberService.findMemberById(memberId);
-        if (member.getWallet().getPoint() < order.getTotalPrice()) {
-            throw new IllegalStateException("포인트가 부족합니다.");
-        }
-        member.getWallet().spentPoint(order.getTotalPrice());
+        memberService.isMemberExist(memberId);
+
         order.makeOnDelivery();
 
         return OrderResponseDto.fromEntity(order);
@@ -99,6 +99,7 @@ public class OrderService {
         return order;
     }
 
+    @Transactional(readOnly = true)
     public Order findBeforeOrderById(long memberId) {
         Optional<Order> optionalOrder = orderRepository.findBeforeOrderById(memberId);
         Order order = optionalOrder.orElseThrow(() -> new NullPointerException("주문 사항이 없습니다"));
@@ -106,6 +107,7 @@ public class OrderService {
 
     }
 
+    @Transactional(readOnly = true)
     public Order findOrderByOrderId(long orderId) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         Order order = optionalOrder.orElseThrow(() -> new NullPointerException("주문 사항이 없습니다"));
