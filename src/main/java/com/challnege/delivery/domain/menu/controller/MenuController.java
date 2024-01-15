@@ -24,11 +24,11 @@ public class MenuController {
     private final MenuService menuService;
     private final ImageS3Service imageS3Service;
 
-    // 메뉴 화면
-    @GetMapping("/{restaurantsId}")
-    public String menuHome() {
-        return "menu";
-    }
+//    // 메뉴 화면
+//    @GetMapping("/{restaurantsId}")
+//    public String menuHome() {
+//        return "menu";
+//    }
 
     // 메뉴 등록
 
