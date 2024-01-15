@@ -30,15 +30,14 @@ public class Restaurant {
     @Column(nullable = false)
     private String resNumber;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> Menu;
 
  /*   @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;*/
 
-    @Column(name = "sales_of_month")
+    @Column()
     private int salesOfMonth;
 
 

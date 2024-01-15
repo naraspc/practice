@@ -20,6 +20,7 @@ public class RestaurantResponseDto {
     private final Category category;
     private final String resNumber;
     private final List<Menu> menu;
+    private final int salesOfMonth;
 
     public static RestaurantResponseDto fromRestaurantEntity(Restaurant restaurant) {
         return RestaurantResponseDto.builder()
@@ -29,6 +30,7 @@ public class RestaurantResponseDto {
                 .category(restaurant.getCategory())
                 .resNumber(restaurant.getResNumber())
                 .menu(restaurant.getMenu())
+                .salesOfMonth(restaurant.getSalesOfMonth())
                 .build();
     }
 
