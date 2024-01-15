@@ -18,7 +18,7 @@ public class Menu extends Auditable {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    // ERD 에서 수정해야할 것 같음. 레스토랑 1 : N 메뉴 로 바꿔야할듯.
+    // ERD 에서 수정해야할 것 같음. 레스토랑 1 : N 메뉴 로 바꿔야할듯. (수정)
 
     @Column(nullable = false)
     private String foodName;
@@ -26,20 +26,25 @@ public class Menu extends Auditable {
     @Column(nullable = false)
     private int price;
 
-    @Lob
-    private byte[] image;
+    @Column(nullable = false)
+    private String imageUrl;
 
-    public Menu(Restaurant restaurant, byte[] imageBytes, MenuRequestDto menuRequestDto) {
+
+    public Menu(Restaurant restaurant, String image, MenuRequestDto menuRequestDto) {
         this.restaurant = restaurant;
         this.foodName = menuRequestDto.getFoodName();
         this.price = menuRequestDto.getPrice();
-        this.image = imageBytes;
+        this.imageUrl = image;
     }
 
-    public void updateMenu(Restaurant restaurant, byte[] imageBytes, MenuRequestDto menuRequestDto) {
+    public void updateMenu(Restaurant restaurant, MenuRequestDto menuRequestDto) {
         this.restaurant = restaurant;
-        this.image = imageBytes;
         this.foodName = menuRequestDto.getFoodName();
         this.price = menuRequestDto.getPrice();
+    }
+
+    public void updateMenuImage(Restaurant restaurant, String imageUrl) {
+        this.restaurant = restaurant;
+        this.imageUrl = imageUrl;
     }
 }
