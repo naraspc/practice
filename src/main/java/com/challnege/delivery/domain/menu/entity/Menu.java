@@ -30,11 +30,11 @@ public class Menu extends Auditable {
     private String imageUrl;
 
 
-    public Menu(Restaurant restaurant, String image, MenuRequestDto menuRequestDto) {
+    public Menu(Restaurant restaurant, String imageUrl, MenuRequestDto menuRequestDto) {
         this.restaurant = restaurant;
         this.foodName = menuRequestDto.getFoodName();
         this.price = menuRequestDto.getPrice();
-        this.imageUrl = image;
+        this.imageUrl = imageUrl;
     }
 
     public void updateMenu(Restaurant restaurant, MenuRequestDto menuRequestDto) {

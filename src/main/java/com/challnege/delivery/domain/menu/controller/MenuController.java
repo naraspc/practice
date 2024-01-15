@@ -24,11 +24,11 @@ public class MenuController {
     private final MenuService menuService;
     private final ImageS3Service imageS3Service;
 
-    // 메뉴 화면
-    @GetMapping("/{restaurantsId}")
-    public String menuHome() {
-        return "menu";
-    }
+//    // 메뉴 화면
+//    @GetMapping("/{restaurantsId}")
+//    public String menuHome() {
+//        return "menu";
+//    }
 
     // 메뉴 등록
 
@@ -55,7 +55,7 @@ public class MenuController {
         MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, menuRequestDto);
         model.addAttribute("menuResponse", menuResponseDto);
         return "menu";
-
+    }
 
     // 메뉴 사진 수정
     @PutMapping("/{restaurantsId}/menus/{menuId}/images")
