@@ -1,7 +1,9 @@
 package com.challnege.delivery.domain.restaurant.dto;
 
+import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.menu.entity.Menu;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
+import com.challnege.delivery.domain.review.entity.Review;
 import com.challnege.delivery.global.audit.Category;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +23,8 @@ public class RestaurantResponseDto {
     private final String resNumber;
     private final List<Menu> menu;
     private final int salesOfMonth;
+    private final Member member;
+    private final List<Review> reviews;
 
     public static RestaurantResponseDto fromRestaurantEntity(Restaurant restaurant) {
         return RestaurantResponseDto.builder()
