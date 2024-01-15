@@ -31,6 +31,7 @@ public class MenuController {
     }
 
     // 메뉴 등록
+
     @PostMapping("/{restaurantsId}/menus")
     public String createMenu(
             @PathVariable Long restaurantsId, // RequestParam 고려해볼것
@@ -43,6 +44,7 @@ public class MenuController {
         return "menu"; // redirect html 만들어지면 싹 정리
     }
 
+
     // 메뉴 수정 (메뉴 이름, 가격)
     @PutMapping("/{restaurantsId}/menus/{menuId}")
     public String updateMenu(
@@ -53,7 +55,7 @@ public class MenuController {
         MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, menuRequestDto);
         model.addAttribute("menuResponse", menuResponseDto);
         return "menu";
-    }
+
 
     // 메뉴 사진 수정
     @PutMapping("/{restaurantsId}/menus/{menuId}/images")
