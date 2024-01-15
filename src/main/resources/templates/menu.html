@@ -9,7 +9,7 @@
 
 <!-- Create Menu Form -->
 <h2>Create Menu Test</h2>
-<form th:action="@{'/restaurant/' + 1 + '/menus'}" method="post" enctype="multipart/form-data">
+<form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus'}" method="post" enctype="multipart/form-data">
     <label for="createImage">Image:</label>
     <input type="file" id="createImage" name="image" accept="image/*" required/>
     <label for="createFoodName">Menu Name:</label>
@@ -21,7 +21,7 @@
 
 <!-- Update Menu Form -->
 <h2>Update Menu Test</h2>
-<form th:action="@{'/restaurant/' + 1 + '/menus/' + menuId}" method="post" enctype="multipart/form-data">
+<form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus/' + menuId}" method="post" enctype="multipart/form-data">
     <label for="updateImage">New Image:</label>
     <input type="file" id="updateImage" name="image" accept="image/*" required/>
     <label for="updateFoodName">New Menu Name:</label>
@@ -33,7 +33,7 @@
 
 <!-- Update Menu Image Form -->
 <h2>Update Menu Image Test</h2>
-<form th:action="@{'/restaurant/' + 1 + '/menus/' + menuId + '/images'}" method="post" enctype="multipart/form-data">
+<form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus/' + menuId + '/images'}" method="post" enctype="multipart/form-data">
     <label for="updateImage">New Image:</label>
     <input type="file" id="updateImage" name="image" accept="image/*" required/>
     <button type="submit">Update Menu Image</button>
@@ -41,7 +41,7 @@
 
 <!-- Delete Menu Form -->
 <h2>Delete Menu Test</h2>
-<form th:action="@{'/restaurant/' + 1 + '/menus/' + menuId}" method="post">
+<form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus/' + menuId}" method="post">
     <input type="hidden" name="_method" value="DELETE"/> <!-- Using Hidden field to simulate a DELETE request -->
     <button type="submit">Delete Menu</button>
 </form>
