@@ -1,13 +1,11 @@
 package com.challnege.delivery.domain.restaurant.entity;
 
 import com.challnege.delivery.domain.menu.entity.Menu;
-import com.challnege.delivery.domain.owner.entity.Owner;
 import com.challnege.delivery.global.audit.Category;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -35,24 +33,15 @@ public class Restaurant {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menu;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Owner owner;
-
-    @Column()
-    private int salesOfMonth;
-
 
     @Builder
-    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Owner owner, int salesOfMonth) {
+    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu) {
         this.id = id;
         this.restaurantName = restaurantName;
         this.address = address;
         this.category = category;
         this.resNumber = resNumber;
         this.menu = menu;
-        this.owner = owner;
-        this.salesOfMonth = salesOfMonth;
     }
 
 
