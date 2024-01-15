@@ -26,6 +26,7 @@ public class Owner {
     private String address;
 
 
+
     @Builder
     public Owner(String email, String password, String ownerName, String phoneNumber, String address, Role role) {
         this.email = email;

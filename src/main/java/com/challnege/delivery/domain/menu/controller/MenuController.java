@@ -54,8 +54,9 @@ public class MenuController {
             Model model) {
         MenuResponseDto menuResponseDto = menuService.updateMenu(restaurantsId, menuId, menuRequestDto);
         model.addAttribute("menuResponse", menuResponseDto);
-        return "menu";
 
+        return "menu";
+    }
 
     // 메뉴 사진 수정
     @PutMapping("/{restaurantsId}/menus/{menuId}/images")
