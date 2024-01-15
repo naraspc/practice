@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/reviews") // Set a base path for the controller
+// Set a base path for the controller
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -19,6 +19,7 @@ public class ReviewController {
     public String postReview(@PathVariable Long restaurantId,
                              @ModelAttribute ReviewRequestDto requestDto,
                              Model model) {
+        System.out.println(requestDto.getMemberId());
         ReviewResponseDto responseDto = reviewService.postReview(restaurantId, requestDto);
         model.addAttribute("reviewResponseDto", responseDto);
         return "reviewResult"; // Return the view name

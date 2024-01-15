@@ -26,10 +26,20 @@ public class ReviewService {
 
     @Transactional
     public ReviewResponseDto postReview(Long restaurantId, ReviewRequestDto requestDto) {
+        Long memberId = requestDto.getMemberId();
+
+        // 로그를 추가하여 memberId 값 확인
+        System.out.println("Received memberId: " + memberId);
+
+        if (memberId == null) {
+            throw new IllegalArgumentException("회원 ID는 null일 수 없습니다");
+        }
+
+        // 나머지 로직은 그대로 유지
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
                 () -> new IllegalArgumentException("해당 업장은 존재하지 않습니다.")
         );
-        Member member = memberRepository.findById(requestDto.getMemberID()).orElseThrow(
+        Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new IllegalArgumentException("해당 회원은 존재하지 않습니다.")
         );
 
