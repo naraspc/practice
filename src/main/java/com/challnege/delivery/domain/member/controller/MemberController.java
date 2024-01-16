@@ -31,7 +31,7 @@ public class MemberController {
     @PostMapping("/signup")
     public String createMember(@Valid @ModelAttribute MemberRequestDto memberRequestDto) {
         MemberResponseDto memberResponseDto = memberService.createMember(memberRequestDto);
-        return "redirect:/members/signup";
+        return "redirect:/restaurants";
     }
 
     @GetMapping("/{memberId}")
