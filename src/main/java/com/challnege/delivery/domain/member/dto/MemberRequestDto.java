@@ -29,10 +29,10 @@ public class MemberRequestDto {
     @NonNull
     private Role role;
 
-    public Member toEntity() {
+    public Member toEntity(String encryptedPassword) {
         return Member.builder()
                 .email(this.email)
-                .password(this.password)
+                .password(encryptedPassword)
                 .nickName(this.nickName)
                 .phoneNumber(this.phoneNumber)
                 .address(this.address)

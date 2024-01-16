@@ -35,6 +35,8 @@ public class Member extends Auditable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String refreshToken;
+
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 
@@ -50,5 +52,9 @@ public class Member extends Auditable {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.role = role;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
