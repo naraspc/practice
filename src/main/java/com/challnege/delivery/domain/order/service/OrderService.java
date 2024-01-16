@@ -31,13 +31,13 @@ public class OrderService {
     private final MenuRepository menuRepository;
     private Menu findMenuByMenuId(long menuId) {
         Optional<Menu> optionalMenu = menuRepository.findById(menuId);
-        Menu menu = optionalMenu.orElseThrow(() -> new NullPointerException("메뉴 없음"));
+        Menu menu = optionalMenu.orElseThrow(() -> new NullPointerException("can not find menu"));
         return menu;
     }
 
     private Restaurant findRestaurantById(long restaurantId) {
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
-        Restaurant restaurant = optionalRestaurant.orElseThrow(() -> new NullPointerException("식당 없음"));
+        Restaurant restaurant = optionalRestaurant.orElseThrow(() -> new NullPointerException("can not find restaurant"));
         return restaurant;
     }
 
@@ -60,9 +60,9 @@ public class OrderService {
 
     public OrderResponseDto addToOrder(long restaurantId, long menuId, long quantity, long memberId) {
         Member member = memberService.findMemberById(memberId);
-        Menu menu = findMenuByMenuId(menuId);// 임시 로직
+        Menu menu = findMenuByMenuId(menuId);
         Order order = getOrderByMember(member);
-        Restaurant restaurant = findRestaurantById(restaurantId);//임시 로직
+        Restaurant restaurant = findRestaurantById(restaurantId);
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .order(order)
@@ -113,7 +113,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findBeforeOrderById(long memberId) {
         Optional<Order> optionalOrder = orderRepository.findBeforeOrderById(memberId);
-        Order order = optionalOrder.orElseThrow(() -> new NullPointerException("주문 사항이 없습니다"));
+        Order order = optionalOrder.orElseThrow(() -> new NullPointerException("can not find order"));
         return order;
 
     }
@@ -121,7 +121,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findOrderByOrderId(long orderId) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
-        Order order = optionalOrder.orElseThrow(() -> new NullPointerException("주문 사항이 없습니다"));
+        Order order = optionalOrder.orElseThrow(() -> new NullPointerException("can not find order"));
         return order;
     }
 }

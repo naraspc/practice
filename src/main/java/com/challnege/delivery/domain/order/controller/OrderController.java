@@ -23,13 +23,13 @@ public class OrderController {
         return "redirect:/restaurants/" + restaurantId;
     }
 
-    @GetMapping//("/{memberId}")//시큐리티 적용 후 path삭제 후 principal로 조회
+    @GetMapping
     public String readCurrentOrder(@RequestParam long memberId,
 //            @PathVariable("memberId") long memberId,
                                    Model model) {
         OrderResponseDto orderResponseDto = orderService.readCurrentOrder(memberId);
         model.addAttribute("orderResponseDto", orderResponseDto);
-        return "orders";//responseEntity로 뿌림?
+        return "orders";
     }
 
     @PatchMapping("/{orderId}")

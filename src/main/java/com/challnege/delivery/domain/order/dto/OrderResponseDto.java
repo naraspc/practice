@@ -14,7 +14,7 @@ public class OrderResponseDto {
 
     private List<OrderMenu> orderMenuList;
     private Long totalPrice;
-    private Status status;//enum으로 할 지 고민
+    private Status status;
     private String restaurantName;
     private String restaurantNumber;
 
