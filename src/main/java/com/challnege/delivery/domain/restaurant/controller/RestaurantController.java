@@ -28,13 +28,26 @@ import java.util.List;
             return "restaurantForm";
         }
 
+        @GetMapping("/{restaurantId}/order")
+        public String showOrderPage(@PathVariable Long restaurantId, Model model) {
+            RestaurantResponseDto restaurantResponseDto = restaurantService.findRestaurantById(restaurantId);
+            model.addAttribute("restaurant", restaurantResponseDto);
+            return "test"; // order.html 페이지로 이동
+        }
 
-//        @PreAuthorize("hasRole('OWNER')")
+
+//        @PostMapping
+//        public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
+//                                                       @RequestParam long memberId) {
+//            restaurantService.createRestaurant(restaurantRequestDto, memberId);
+//            return new ResponseEntity<>("Restaurant created successfully", HttpStatus.OK);
+//        }
+//
         @PostMapping
-        public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
+        public String createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
                                                        @AuthenticationPrincipal UserDetails member) {
             restaurantService.createRestaurant(restaurantRequestDto, member);
-            return new ResponseEntity<>("Restaurant created successfully", HttpStatus.OK);
+            return "restaurantList";
         }
 
         @GetMapping("/{id}")

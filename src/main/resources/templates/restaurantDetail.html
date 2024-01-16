@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,45 +57,126 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${menu.foodName}">Menu Name</h5>
                         <p class="card-text" th:text="${'₩ ' + menu.price}">Price</p>
-                        <button class="btn order-btn" th:onclick="'addToOrder(' + ${menu.id} + ');'">주문하기</button>
-                        <button class="btn cart-btn" th:onclick="'addToCart(' + ${menu.id} + ');'">장바구니에 담기</button>
+                        <div class="member-id-input">
+                            <label for="memberId">멤버 ID:
+                            <input type="number" id="memberId" name="memberId" placeholder="멤버 ID를 입력하세요" required>
+                            </label>
+                        </div>
+                            <label>수량
+                            <input type="number" min="1" value="1" class="quantity-input" th:id="'quantity-' + ${menu.id}">
+                            </label>
+
+                        <!-- '장바구니에 담기' 버튼: AJAX 요청을 통해 서버의 addToOrder 메소드 호출 -->
+                        <button class="btn cart-btn" th:onclick="'addToCart(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">장바구니에 담기</button>
                         <button class="btn btn-danger delete-btn" th:attr="data-menu-id=${menu.id}" th:onclick="'deleteMenu(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">메뉴 삭제</button>
+                        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ', ' + ${menu.id} + ', ' + ${memberId} + ');'">주문하러 가기</button>
+                        <script>
+                            function placeOrder(restaurantId, menuId) {
+                                var memberId = document.getElementById("memberId").value;
+                                // memberId가 유효한지 확인하고 필요한 경우 경고 메시지를 표시합니다.
+                                if (!memberId) {
+                                    alert('멤버 ID를 입력하세요.');
+                                    return;
+                                }
+
+                                // readCurrentOrder 메서드를 호출하여 주문 정보를 가져옵니다.
+                                fetch(`/restaurants/{restaurantId}/orders?memberId=${memberId}`, {
+                                    method: 'GET',
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            return response.text();
+                                        } else {
+                                            throw new Error('Network response was not ok.');
+                                        }
+                                    })
+                                    .then(text => {
+                                        // 주문 정보를 가져온 후, orders.html 페이지로 이동합니다.
+                                        window.location.href = `/restaurants/{restaurantId}/orders?memberId=${memberId}`;
+                                    })
+                                    .catch(error => {
+                                        console.error('주문 정보를 가져오는 중 문제가 발생했습니다:', error);
+                                        alert('주문 정보를 가져오는 중 문제가 발생했습니다.');
+                                    });
+                            }
+                        </script>
 
                     </div>
                 </div>
             </div>
 
             <script>
+                let cart = [];
 
-                function deleteMenu(restaurantId, menuId) {
-                    const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
+                    function addToCart(restaurantId, menuId) {
+                        const quantityInput = document.getElementById('quantity-' + menuId);
+                        const quantity = quantityInput.value;
+                        const memberIdInput = document.getElementById("memberId");
+                        const memberId = memberIdInput.value;
 
-                    if (confirmation) {
-                        const url = `/restaurant/${restaurantId}/menus/${menuId}`;
+                        if (!memberId) {
+                            alert('멤버 ID를 입력 하세요.');
+                            return;
+                        }
 
-                        fetch(url, {
-                            method: "DELETE",
+                        fetch(`/restaurants/${restaurantId}/orders/${menuId}`, {
+                            method: 'POST',
                             headers: {
-                                "Content-Type": "application/json",
+                                'Content-Type': 'application/x-www-form-urlencoded',
                             },
+                            body: `quantity=${quantity}&memberId=${memberId}`
                         })
-                            .then(function (response) {
+                            .then(response => {
                                 if (response.ok) {
-                                    alert("메뉴가 성공적으로 삭제되었습니다.");
-                                    location.reload(); // 페이지 새로고침
+                                    return response.text();
                                 } else {
-                                    alert("메뉴 삭제 중 오류가 발생했습니다.");
+                                    throw new Error('Network response was not ok.');
                                 }
                             })
-                            .catch(function (error) {
-                                console.error("메뉴 삭제 중 오류 발생:", error);
+                            .then(text => {
+                                alert('장바구니에 담겼습니다.');
+                            })
+                            .catch(error => {
+                                console.error('장바구니에 담는 중 문제가 발생했습니다:', error);
+                                alert('장바구니에 담는 중 문제가 발생했습니다.');
                             });
                     }
+
+                    function deleteMenu(restaurantId, menuId) {
+                        const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
+
+                        if (confirmation) {
+                            const url = `/restaurant/${restaurantId}/menus/${menuId}`;
+
+                            fetch(url, {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                                .then(function (response) {
+                                    if (response.ok) {
+                                        alert("메뉴가 성공적으로 삭제되었습니다.");
+                                        location.reload(); // 페이지 새로고침
+                                    } else {
+                                        alert("메뉴 삭제 중 오류가 발생했습니다.");
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.error("메뉴 삭제 중 오류 발생:", error);
+                                });
+                        }
+
                 }
             </script>
+
                     </div>
+
+
                 </div>
+
             </div>
+
 
 
         <h2 class="review-header mb-4">리뷰</h2>
@@ -117,73 +198,7 @@
             </tbody>
         </table>
 
-    <script>
-        // Placeholder functions for adding items to order or cart
-        function addToOrder(menuId) {
-            console.log('Adding to order:', menuId);
-            // Implement the function to add the item to the order
-            // This could involve sending a request to your server or updating the local state
-        }
 
-<h2>Restaurant and Menu Information</h2>
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>Restaurant ID</th>
-        <th>Restaurant Name</th>
-        <th>Address</th>
-        <th>Category</th>
-        <th>Menu Items</th>
-        <th>Sales of Month</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="restaurants : ${restaurant}">
-        <td th:text="${restaurants.id}"></td>
-        <td th:text="${restaurants.restaurantName}"></td>
-        <td th:text="${restaurants.address}"></td>
-        <td th:text="${restaurants.category}"></td>
-        <td>
-            <ul>
-                <li th:each="menu : ${restaurants.menu}">
-                    <span th:text="${menu.foodName}"></span> - <span th:text="${menu.price}"></span>
-
-                    <!-- 메뉴 이미지 표시 -->
-                    <img th:src="${menu.imageUrl}" alt="Menu Image" width="100" height="100"/>
-
-                    <form th:action="@{'/restaurants/' + ${restaurants.id} + '/orders/' + ${menu.id}}" method="post">
-                        <label for="quantity">수량:</label>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1" required>
-                        <label for="memberId">멤버아이디(임시):</label>
-                        <input type="number" id="memberId" name="memberId" required>
-                        <input type="hidden" name="restaurantId" value="${restaurants.id}">
-                        <input type="hidden" name="menuId" value="${menu.id}">
-                        <button type="submit">담기</button>
-                    </form>
-                </li>
-            </ul>
-        </td>
-        <td th:text="${restaurants.salesOfMonth}"></td>
-
-        <!-- readCurrentOrder 기능 추가 -->
-        <td>
-            <form th:action="@{'/restaurants/' + ${restaurants.id} + '/orders'}" method="get">
-                <label for="memberIdForOrder">멤버아이디(임시):</label>
-                <input type="number" id="memberIdForOrder" name="memberId" required>
-                <button type="submit">주문 확인</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-        function addToCart(menuId) {
-            console.log('Adding to cart:', menuId);
-            // Implement the function to add the item to the cart
-            // This could involve sending a request to your server or updating the local state
-        }
-    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
