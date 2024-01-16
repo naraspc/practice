@@ -36,22 +36,22 @@ public class Restaurant {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menu;
 
-
-    private String ownerName;
+    @ManyToOne
+    private Member member;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
 
     @Builder
-    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, String ownerName, List<Review> reviews) {
+    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Member member, List<Review> reviews) {
         this.id = id;
         this.restaurantName = restaurantName;
         this.address = address;
         this.category = category;
         this.resNumber = resNumber;
         this.menu = menu;
-        this.ownerName = ownerName;
+        this.member = member;
         this.reviews = reviews;
     }
 
