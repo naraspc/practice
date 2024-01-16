@@ -46,7 +46,7 @@
         <h3 th:text="${restaurant.restaurantName}">Restaurant Name</h3>
         <p th:text="${restaurant.address}">Restaurant Address</p>
         <p th:text="${restaurant.resNumber}">Restaurant Phone Number</p>
-        <p th:text="${'Owner: ' + restaurant.member.nickName}">Owner</p> <!-- Member 정보를 표시 -->
+        <p th:text="${'Owner: ' + restaurant.ownerName}">Owner</p> <!-- Member 정보를 표시 -->
         <!-- Details for each menu item -->
         <h2 class="menu-header mb-4">메뉴</h2>
         <div class="row">

@@ -44,14 +44,14 @@ public class Restaurant {
 
 
     @Builder
-    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Member member, List<Review> reviews) {
+    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, String ownerName, List<Review> reviews) {
         this.id = id;
         this.restaurantName = restaurantName;
         this.address = address;
         this.category = category;
         this.resNumber = resNumber;
         this.menu = menu;
-        this.member = member;
+        this.ownerName = ownerName;
         this.reviews = reviews;
     }
 

@@ -22,7 +22,7 @@ public class RestaurantService {
     //Create
     public RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurantRequestDto) {
         Restaurant restaurant = Restaurant.builder()
-                .member(restaurantRequestDto.getMember())
+                .ownerName(restaurantRequestDto.getOwnerName())
                 .restaurantName(restaurantRequestDto.getRestaurantName())
                 .category(restaurantRequestDto.getCategory())
                 .address(restaurantRequestDto.getAddress())
