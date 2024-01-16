@@ -1,5 +1,6 @@
 package com.challnege.delivery.domain.restaurant.entity;
 
+import com.amazonaws.services.s3.model.Owner;
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.menu.entity.Menu;
 import com.challnege.delivery.domain.review.entity.Review;
@@ -35,19 +36,15 @@ public class Restaurant {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menu;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+
+    private String ownerName;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @Column()
-    private int salesOfMonth;
-
 
     @Builder
-    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Member member, int salesOfMonth) {
+    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Member member, List<Review> reviews) {
         this.id = id;
         this.restaurantName = restaurantName;
         this.address = address;
@@ -55,7 +52,7 @@ public class Restaurant {
         this.resNumber = resNumber;
         this.menu = menu;
         this.member = member;
-        this.salesOfMonth = salesOfMonth;
+        this.reviews = reviews;
     }
 
 

@@ -22,8 +22,7 @@ public class RestaurantResponseDto {
     private final Category category;
     private final String resNumber;
     private final List<Menu> menu;
-    private final int salesOfMonth;
-    private final Member member;
+    private final String ownerName;
     private final List<Review> reviews;
 
     public static RestaurantResponseDto fromRestaurantEntity(Restaurant restaurant) {
@@ -34,7 +33,8 @@ public class RestaurantResponseDto {
                 .category(restaurant.getCategory())
                 .resNumber(restaurant.getResNumber())
                 .menu(restaurant.getMenu())
-                .salesOfMonth(restaurant.getSalesOfMonth())
+                .ownerName(restaurant.getOwnerName())
+                .reviews(restaurant.getReviews())
                 .build();
     }
 
