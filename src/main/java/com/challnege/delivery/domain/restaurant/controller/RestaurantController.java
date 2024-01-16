@@ -7,6 +7,9 @@ import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +29,11 @@ import java.util.List;
         }
 
 
+        @PreAuthorize("hasRole('OWNER')")
         @PostMapping
         public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
-                                                       @RequestParam long memberId) {
-            restaurantService.createRestaurant(restaurantRequestDto, memberId);
+                                                       @AuthenticationPrincipal UserDetails member) {
+            restaurantService.createRestaurant(restaurantRequestDto, member);
             return new ResponseEntity<>("Restaurant created successfully", HttpStatus.OK);
         }
 

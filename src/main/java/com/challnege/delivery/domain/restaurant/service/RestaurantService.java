@@ -8,6 +8,7 @@ import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.repository.RestaurantRepository;
 import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class RestaurantService {
     private final MemberService memberService;
 
     //Create
-    public RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurantRequestDto, long memberId) {
-        Member member = memberService.findMemberById(memberId);
+    public RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurantRequestDto, UserDetails auth) {
+        Member member = memberService.findMemberByEmail(auth.getUsername());
 
         Restaurant restaurant = Restaurant.builder()
                 .member(member)
