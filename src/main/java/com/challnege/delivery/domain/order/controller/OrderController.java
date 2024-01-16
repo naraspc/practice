@@ -3,9 +3,15 @@ package com.challnege.delivery.domain.order.controller;
 import com.challnege.delivery.domain.order.dto.OrderResponseDto;
 import com.challnege.delivery.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,36 +24,54 @@ public class OrderController {
     private String addToOrder(@PathVariable("restaurantId") long restaurantId,
                               @PathVariable("menuId") long menuId,
                               @RequestParam long quantity,
-                              @RequestParam long memberId) {
-        OrderResponseDto orderResponseDto = orderService.addToOrder(restaurantId, menuId, quantity, memberId);
+                              @AuthenticationPrincipal UserDetails auth) {
+        OrderResponseDto orderResponseDto = orderService.addToOrder(restaurantId, menuId, quantity, auth);
         return "redirect:/restaurants/" + restaurantId;
     }
 
-    @GetMapping//("/{memberId}")//시큐리티 적용 후 path삭제 후 principal로 조회
-    public String readCurrentOrder(@RequestParam long memberId,
-//            @PathVariable("memberId") long memberId,
+    @GetMapping
+    public String readCurrentOrder(@AuthenticationPrincipal UserDetails auth,
                                    Model model) {
-        OrderResponseDto orderResponseDto = orderService.readCurrentOrder(memberId);
+        OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
         model.addAttribute("orderResponseDto", orderResponseDto);
-        return "orders";//responseEntity로 뿌림?
+        return "orders";
+    }
+
+//    @GetMapping("/owner")
+//    public ResponseEntity readOrdersByOwner(@PathVariable("restaurantId") long restaurantId,
+//                                            @AuthenticationPrincipal UserDetails auth) {
+//        List<OrderResponseDto> orderResponseDtoList = orderService.readOrdersList(restaurantId,auth);
+//        return new ResponseEntity<>(orderResponseDtoList, HttpStatus.OK);
+//    }
+    @GetMapping("/owner")
+    public String readOrdersByOwner(@PathVariable("restaurantId") long restaurantId,
+                                    @AuthenticationPrincipal UserDetails auth,
+                                    Model model) {
+        List<OrderResponseDto> orderResponseDtoList = orderService.readOrdersListByOwner(restaurantId, auth);
+
+        // Model에 주문 목록 추가
+        model.addAttribute("orders", orderResponseDtoList);
+
+        // Thymeleaf 템플릿의 경로 반환
+        return "orderOfOwner";
     }
 
     @PatchMapping("/{orderId}")
     public String makeOrder(@PathVariable("restaurantId") long restaurantId,
                             @PathVariable("orderId") long orderId,
-                            @RequestParam long memberId,
+                            @AuthenticationPrincipal UserDetails auth,
                             Model model) {
-        OrderResponseDto orderResponseDto = orderService.makeOrder(orderId, memberId);
+        OrderResponseDto orderResponseDto = orderService.makeOrder(orderId, auth);
         model.addAttribute("orderResponseDto", orderResponseDto);
         return "index";
     }
 
     @PatchMapping("/owner/{orderId}")
     public String completeOrder(@PathVariable("restaurantId") long restaurantId,
-                            @PathVariable("orderId") long orderId,
-                            @RequestParam long memberId,
+                                @PathVariable("orderId") long orderId,
+                                @AuthenticationPrincipal UserDetails auth,
                             Model model) {
-        OrderResponseDto orderResponseDto = orderService.completeOrder(orderId, memberId);
+        OrderResponseDto orderResponseDto = orderService.completeOrder(restaurantId,orderId, auth);
         model.addAttribute("orderResponseDto", orderResponseDto);
         return "index";
     }

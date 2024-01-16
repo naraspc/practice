@@ -22,6 +22,10 @@ repositories {
 }
 
 dependencies {
+	//security,jwt
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.auth0:java-jwt:4.2.1'
+
 	// thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 

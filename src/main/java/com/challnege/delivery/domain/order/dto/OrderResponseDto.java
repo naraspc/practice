@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class OrderResponseDto {
@@ -44,5 +45,11 @@ public class OrderResponseDto {
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
                 .build();
+    }
+
+    public static List<OrderResponseDto> fromEntityList(List<Order> orderList) {
+        return orderList.stream()
+                .map(OrderResponseDto::fromEntityByOwner)
+                .collect(Collectors.toList());
     }
 }

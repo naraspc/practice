@@ -29,7 +29,7 @@ import java.util.List;
         }
 
 
-        @PreAuthorize("hasRole('OWNER')")
+//        @PreAuthorize("hasRole('OWNER')")
         @PostMapping
         public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
                                                        @AuthenticationPrincipal UserDetails member) {

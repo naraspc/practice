@@ -10,6 +10,7 @@ import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class RestaurantService {
 
     //Read find by one
     public RestaurantResponseDto findRestaurantById(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("cannot found restaurant"));
+        Restaurant restaurant = findRestaurantByResId(id);
 
         return RestaurantResponseDto.fromRestaurantEntity(restaurant);
     }
@@ -73,5 +74,12 @@ public class RestaurantService {
         } else {
             return false;
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Restaurant findRestaurantByResId(long restaurantId) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
+        Restaurant restaurant = optionalRestaurant.orElseThrow(() -> new NullPointerException("식당을 찾을 수 없습니다."));
+        return restaurant;
     }
 }
