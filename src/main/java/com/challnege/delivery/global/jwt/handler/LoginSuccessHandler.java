@@ -2,6 +2,7 @@ package com.challnege.delivery.global.jwt.handler;
 
 import com.challnege.delivery.domain.member.repository.MemberRepository;
 import com.challnege.delivery.global.jwt.jwt.JwtService;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+
+import java.io.IOException;
 
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -19,9 +22,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Value("${spring.jwt.access.expiration}")
     private String accessTokenExpiration;
 
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+                                        Authentication authentication) throws IOException, ServletException {
         String email = extractUsername(authentication);
         String accessToken = jwtService.createAccessToken(email);
         String refreshToken = jwtService.createRefreshToken();
@@ -33,6 +37,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                     user.updateRefreshToken(refreshToken);
                     memberRepository.saveAndFlush(user);
                 });
+
+        // 로그인 성공 후 index.html로 리다이렉트
+        super.setDefaultTargetUrl("http://localhost:8080/restaurants");
+        super.onAuthenticationSuccess(request, response, authentication);
     }
 
     private String extractUsername(Authentication authentication) {

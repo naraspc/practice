@@ -1,7 +1,7 @@
 package com.challnege.delivery.global.config;
 
 import com.challnege.delivery.domain.member.repository.MemberRepository;
-import com.challnege.delivery.global.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.challnege.delivery.global.jwt.filter.CustomFormUsernamePasswordAuthenticationFilter;
 import com.challnege.delivery.global.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.challnege.delivery.global.jwt.handler.LoginFailureHandler;
 import com.challnege.delivery.global.jwt.handler.LoginSuccessHandler;
@@ -15,7 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -68,7 +67,7 @@ public class SecurityConfig {
 
                     ;
                     http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
-                    http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
+                    http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomFormUsernamePasswordAuthenticationFilter.class);
                 });
         return http.build();
     }
@@ -93,9 +92,9 @@ public class SecurityConfig {
 
 
     @Bean
-    public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
-        CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
-                = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
+    public CustomFormUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
+        CustomFormUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
+                = new CustomFormUsernamePasswordAuthenticationFilter(objectMapper);
         customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
         customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
         customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
