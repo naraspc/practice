@@ -9,7 +9,7 @@
 
 <h2>Restaurant Form</h2>
 
-<form action="/restaurants" method="post">
+<form id="restaurantForm">
     <label for="restaurantName">Restaurant Name:</label>
     <input type="text" id="restaurantName" name="restaurantName" required>
 
@@ -35,13 +35,43 @@
 
     <br>
 
-    <label for="memberId">Member ID:</label>
-    <input type="text" id="memberId" name="memberId" required>
+    <!-- Remove memberId input field as it's not needed -->
 
     <br>
 
-    <button type="submit">Submit</button>
+    <button type="button" onclick="submitForm()">Submit</button>
 </form>
+
+<script>
+    function submitForm() {
+        var restaurantForm = document.getElementById('restaurantForm');
+        var formData = new FormData(restaurantForm);
+
+        // Get Authorization token from localStorage
+        var authToken = localStorage.getItem('Authorization');
+
+        // Set Authorization header
+        var headers = new Headers({
+            'Authorization': 'Bearer ' + authToken
+        });
+
+        // Fetch API with headers
+        fetch('/restaurants', {
+            method: 'POST',
+            headers: headers,
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle response data as needed
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+    }
+</script>
 
 </body>
 </html>
