@@ -1,7 +1,6 @@
 package com.challnege.delivery.domain.restaurant.service;
 
 import com.challnege.delivery.domain.member.entity.Member;
-import com.challnege.delivery.domain.member.repository.MemberRepository;
 import com.challnege.delivery.domain.member.service.MemberService;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantResponseDto;

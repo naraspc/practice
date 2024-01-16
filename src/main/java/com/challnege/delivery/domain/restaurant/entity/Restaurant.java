@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -43,8 +42,9 @@ public class Restaurant {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+
     @Builder
-    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Member member) {
+    public Restaurant(long id, String restaurantName, String address, Category category, String resNumber, List<Menu> menu, Member member, List<Review> reviews) {
         this.id = id;
         this.restaurantName = restaurantName;
         this.address = address;
@@ -52,6 +52,7 @@ public class Restaurant {
         this.resNumber = resNumber;
         this.menu = menu;
         this.member = member;
+        this.reviews = reviews;
     }
 
 

@@ -75,7 +75,7 @@ public class MenuController {
     }
 
     // 메뉴 삭제 (Delete는 서비스에서 안정성 문제가 있어서 고려해봐야함)
-    @DeleteMapping("/{restaurantsId}/menus/{menuId}")
+    @DeleteMapping ("/{restaurantsId}/menus/{menuId}")
     public String deleteMenu(@PathVariable Long restaurantsId, @PathVariable Long menuId) {
         menuService.deleteMenu(restaurantsId, menuId);
         return "menu";

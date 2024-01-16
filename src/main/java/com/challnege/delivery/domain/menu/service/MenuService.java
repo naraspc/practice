@@ -53,8 +53,6 @@ public class MenuService {
         return new MenuResponseDto(menu); // 빌더패턴? -> 등록일말고 수정일만 넘기게
     }
 
-
-
     // 메뉴 이미지 수정
     @Transactional
     public MenuImageResponseDto updateMenuImage(Long restaurantsId, Long menuId, String imageUrl) {
@@ -70,9 +68,10 @@ public class MenuService {
     // 메뉴 삭제
     @Transactional
     public void deleteMenu(Long restaurantsId, Long menuId) {
-        restaurantRepository.findById(restaurantsId).orElseThrow(
-                () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
         Menu menu = findMenuById(menuId);
+        Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
+                () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
+        restaurant.getMenu().remove(menu);
         menuRepository.delete(menu);
     }
 
