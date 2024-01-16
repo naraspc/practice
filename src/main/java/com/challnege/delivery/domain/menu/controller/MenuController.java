@@ -26,8 +26,10 @@ public class MenuController {
 
     // 메뉴 화면
     @GetMapping("/{restaurantsId}")
-    public String menuHome(@PathVariable Long restaurantsId, Model model) {
-        model.addAttribute("restaurantsId",restaurantsId);
+    public String menuHome(
+            @PathVariable Long restaurantsId,
+            Model model) {
+        model.addAttribute("restaurantsId", restaurantsId);
         return "menu";
     }
 
@@ -47,7 +49,7 @@ public class MenuController {
 
 
     // 메뉴 수정 (메뉴 이름, 가격)
-    @PutMapping("/{restaurantsId}/menus/{menuId}")
+    @PatchMapping("/{restaurantsId}/menus/{menuId}")
     public String updateMenu(
             @PathVariable Long restaurantsId,
             @PathVariable Long menuId,
@@ -60,7 +62,7 @@ public class MenuController {
     }
 
     // 메뉴 사진 수정
-    @PutMapping("/{restaurantsId}/menus/{menuId}/images")
+    @PatchMapping("/{restaurantsId}/menus/{menuId}/images")
     public String updateMenuImage(
             @PathVariable Long restaurantsId,
             @PathVariable Long menuId,

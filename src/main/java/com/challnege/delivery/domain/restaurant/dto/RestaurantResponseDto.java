@@ -33,7 +33,7 @@ public class RestaurantResponseDto {
                 .category(restaurant.getCategory())
                 .resNumber(restaurant.getResNumber())
                 .menu(restaurant.getMenu())
-                .ownerName(restaurant.getOwnerName())
+                .ownerName(restaurant.getMember().getNickName())
                 .reviews(restaurant.getReviews())
                 .build();
     }

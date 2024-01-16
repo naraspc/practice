@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -124,6 +124,59 @@
             // Implement the function to add the item to the order
             // This could involve sending a request to your server or updating the local state
         }
+
+<h2>Restaurant and Menu Information</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Restaurant ID</th>
+        <th>Restaurant Name</th>
+        <th>Address</th>
+        <th>Category</th>
+        <th>Menu Items</th>
+        <th>Sales of Month</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="restaurants : ${restaurant}">
+        <td th:text="${restaurants.id}"></td>
+        <td th:text="${restaurants.restaurantName}"></td>
+        <td th:text="${restaurants.address}"></td>
+        <td th:text="${restaurants.category}"></td>
+        <td>
+            <ul>
+                <li th:each="menu : ${restaurants.menu}">
+                    <span th:text="${menu.foodName}"></span> - <span th:text="${menu.price}"></span>
+
+                    <!-- 메뉴 이미지 표시 -->
+                    <img th:src="${menu.imageUrl}" alt="Menu Image" width="100" height="100"/>
+
+                    <form th:action="@{'/restaurants/' + ${restaurants.id} + '/orders/' + ${menu.id}}" method="post">
+                        <label for="quantity">수량:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+                        <label for="memberId">멤버아이디(임시):</label>
+                        <input type="number" id="memberId" name="memberId" required>
+                        <input type="hidden" name="restaurantId" value="${restaurants.id}">
+                        <input type="hidden" name="menuId" value="${menu.id}">
+                        <button type="submit">담기</button>
+                    </form>
+                </li>
+            </ul>
+        </td>
+        <td th:text="${restaurants.salesOfMonth}"></td>
+
+        <!-- readCurrentOrder 기능 추가 -->
+        <td>
+            <form th:action="@{'/restaurants/' + ${restaurants.id} + '/orders'}" method="get">
+                <label for="memberIdForOrder">멤버아이디(임시):</label>
+                <input type="number" id="memberIdForOrder" name="memberId" required>
+                <button type="submit">주문 확인</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
         function addToCart(menuId) {
             console.log('Adding to cart:', menuId);

@@ -14,8 +14,6 @@ public class RestaurantRequestDto { //valid 추가
     private final String address;
     private final Category category;
     private final String resNumber;
-    private final Member member;
-    private final String ownerName;
 
 
 }

@@ -27,7 +27,6 @@ public class MenuService {
     public MenuResponseDto createMenu(Long restaurantsId, String imageUrl, MenuRequestDto menuRequestDto) {
         Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
                 () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
-
         Menu menu = new Menu(restaurant, imageUrl, menuRequestDto);
         Menu createMenu = menuRepository.save(menu);
         return new MenuResponseDto(createMenu);
@@ -47,8 +46,7 @@ public class MenuService {
     public MenuResponseDto updateMenu(Long restaurantsId, Long menuId, MenuRequestDto menuRequestDto) {
         Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
                 () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
-        Menu menu = menuRepository.findById(menuId).orElseThrow(
-                () -> new NoSuchElementException("메뉴를 찾을 수 없습니다."));
+        Menu menu = findMenuById(menuId);
 
         menu.updateMenu(restaurant, menuRequestDto);
 
@@ -60,8 +58,7 @@ public class MenuService {
     public MenuImageResponseDto updateMenuImage(Long restaurantsId, Long menuId, String imageUrl) {
         Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
                 () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
-        Menu menu = menuRepository.findById(menuId).orElseThrow(
-                () -> new NoSuchElementException("메뉴를 찾을 수 없습니다."));
+        Menu menu = findMenuById(menuId);
 
         menu.updateMenuImage(restaurant, imageUrl);
 
@@ -71,11 +68,17 @@ public class MenuService {
     // 메뉴 삭제
     @Transactional
     public void deleteMenu(Long restaurantsId, Long menuId) {
+        Menu menu = findMenuById(menuId);
         Restaurant restaurant = restaurantRepository.findById(restaurantsId).orElseThrow(
                 () -> new NoSuchElementException("음식점을 찾을 수 없습니다."));
+        restaurant.getMenu().remove(menu);
+        menuRepository.delete(menu);
+    }
+
+    @Transactional(readOnly = true)
+    public Menu findMenuById(Long menuId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(
                 () -> new NoSuchElementException("메뉴를 찾을 수 없습니다."));
-        restaurant.getMenu().remove(menu);
-        menuRepository.deleteById(menuId);
+        return menu;
     }
 }

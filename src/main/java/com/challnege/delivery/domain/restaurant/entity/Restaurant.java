@@ -1,6 +1,5 @@
 package com.challnege.delivery.domain.restaurant.entity;
 
-import com.amazonaws.services.s3.model.Owner;
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.menu.entity.Menu;
 import com.challnege.delivery.domain.review.entity.Review;
@@ -37,6 +36,7 @@ public class Restaurant {
     private List<Menu> menu;
 
     @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)

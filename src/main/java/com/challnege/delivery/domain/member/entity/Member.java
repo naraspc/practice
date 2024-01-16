@@ -1,12 +1,16 @@
 package com.challnege.delivery.domain.member.entity;
 
-import com.challnege.delivery.domain.wallet.entity.Wallet;
+import com.challnege.delivery.domain.order.entity.Order;
+import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.global.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,31 +21,34 @@ public class Member extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
 
-    private String NickName;
+    private String nickName;
 
     private String phoneNumber;
 
     private String address;
 
-    @OneToOne
-    @JoinColumn(name = "wallet_id")
-    private Wallet wallet;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "member")
+    private List<Order> orderList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Restaurant> restaurantList = new ArrayList<>();
+
     @Builder
-    public Member(String email, String password, String nickName, String phoneNumber, String address, Role role, Wallet wallet) {
+    public Member(List<Restaurant> restaurantList, String email, String password, String nickName, String phoneNumber, String address, Role role) {
+        this.restaurantList = restaurantList;
         this.email = email;
         this.password = password;
-        this.NickName = nickName;
+        this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.role = role;
-        this.wallet = wallet;
     }
 }

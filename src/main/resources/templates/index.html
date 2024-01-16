@@ -1,10 +1,18 @@
+<!-- src/main/resources/templates/index.html -->
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Challenge</title>
 </head>
 <body>
+
+<h1>Welcome to Delivery Challenge</h1>
+
+<p><a th:href="@{/members/signup}">Sign Up</a></p>
+<p><a th:href="@{/members}">View Members</a></p>
 
 </body>
 </html>
