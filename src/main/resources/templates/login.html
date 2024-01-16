@@ -25,31 +25,33 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     method: 'POST',
     body: new FormData(event.target),
   })
-  .then(response => {
-    // 로그로 서버 응답 헤더 확인
-    console.log('서버 응답 헤더:', response.headers;
-    console.log('서버 응답 헤더 이름:', response.headers.keys());
-    // 로그인이 성공하면 Authorization과 Authorization-Refresh를 로컬 스토리지에 저장
-    if (response.ok) {
-      const authorizationHeader = response.headers.authorization;
-      const refreshHeader = response.headers.authorizationRefresh;
+.then(response => {
+  // 로그로 서버 응답 헤더 확인
+  console.log('서버 응답 헤더:', response.headers.get('Authorization'));
+  console.log('서버 응답 헤더:',  response.headers.get('Connection'));
+  console.log('서버 응답 헤더:', response.headers.get('Authorization-Refresh'));
 
-      // 로그로 확인
-      console.log('Authorization:', authorizationHeader);
-      console.log('Authorization-Refresh:', refreshHeader);
+  // 로그인이 성공하면 Authorization과 Authorization-Refresh를 로컬 스토리지에 저장
+  if (response.ok) {
+    const authorizationHeader = response.headers.get('Authorization');
+    const refreshHeader = response.headers.get('Authorization-Refresh');
 
-      // 로컬 스토리지에 저장
-      localStorage.setItem('Authorization', authorizationHeader);
-      localStorage.setItem('Authorization-Refresh', refreshHeader);
+    // 로그로 확인
+    console.log('Authorization:', authorizationHeader);
+    console.log('Authorization-Refresh:', refreshHeader);
 
-      // 로그인 성공 후 원하는 페이지로 리다이렉트 (예: 레스토랑 페이지)
-      window.location.href = 'http://localhost:8080/restaurants';
-    } else {
-      // 로그인이 실패한 경우에 대한 처리
-      console.error('로그인 실패!');
-    }
-  })
-  .catch(error => console.error('에러 발생:', error));
+    // 로컬 스토리지에 저장
+    localStorage.setItem('Authorization', authorizationHeader);
+    localStorage.setItem('Authorization-Refresh', refreshHeader);
+
+    // 로그인 성공 후 원하는 페이지로 리다이렉트 (예: 레스토랑 페이지)
+    window.location.href = 'http://localhost:8080/restaurants';
+  } else {
+    // 로그인이 실패한 경우에 대한 처리
+    console.error('로그인 실패!');
+  }
+})
+.catch(error => console.error('에러 발생:', error));
 });
 </script>
 
