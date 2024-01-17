@@ -35,51 +35,10 @@
             margin-top: 10px;
         }
     </style>
-</head>
-<body>
-<div class="container mt-5">
-    <div class="info-header text-center">
-        <h1>가게 상세 정보</h1>
-    </div>
-    <div id="restaurantId" th:text="${restaurant.id}" style="display: none;"></div>
-    <div class="info-content">
-        <h3 th:text="${restaurant.restaurantName}">Restaurant Name</h3>
-        <p th:text="${restaurant.address}">Restaurant Address</p>
-        <p th:text="${restaurant.resNumber}">Restaurant Phone Number</p>
-        <p th:text="${'Owner: ' + restaurant.ownerName}">Owner</p> <!-- Member 정보를 표시 -->
-        <!-- Details for each menu item -->
-        <h2 class="menu-header mb-4">메뉴</h2>
-        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ');'">주문 목록 보기</button>
-        <button class="btn cart-btn" th:onclick="'makeOrder(' + ${restaurant.id} + ');'">주문 하기</button>
-        <div class="row">
-            <!-- Menu items should be dynamically loaded using server-side rendering or client-side JavaScript -->
-            <div class="col-md-4 mb-3" th:each="menu : ${restaurant.menu}">
+    <script>
+        const authorization = localStorage.getItem('Authorization');
 
-                <div class="card card-menu">
-                    <img th:src="@{${menu.imageUrl}}" class="card-img-top" alt="Menu Image" onerror="this.onerror=null; this.src='default-image-path.jpg'">
-
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${menu.foodName}">Menu Name</h5>
-                        <p class="card-text" th:text="${'₩ ' + menu.price}">Price</p>
-<!--                        <div class="member-id-input">-->
-<!--                            <label for="memberId">멤버 ID:-->
-<!--                            <input type="number" id="memberId" name="memberId" placeholder="멤버 ID를 입력하세요" required>-->
-<!--                            </label>-->
-<!--                        </div>-->
-                            <label>수량
-                            <input type="number" min="1" value="1" class="quantity-input" th:id="'quantity-' + ${menu.id}">
-                            </label>
-
-                        <!-- '장바구니에 담기' 버튼: AJAX 요청을 통해 서버의 addToOrder 메소드 호출 -->
-                        <button class="btn cart-btn" th:onclick="'addToCart(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">장바구니에 담기</button>
-                        <button class="btn btn-danger delete-btn" th:attr="data-menu-id=${menu.id}" th:onclick="'deleteMenu(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">메뉴 삭제</button>
-
-
-
-                        <script>
-    const authorization = localStorage.getItem('Authorization');
-
-function makeOrder(restaurantId) {
+        function makeOrder(restaurantId) {
         if (!authorization) {
             alert('인증 정보가 없습니다. 로그인이 필요합니다.');
             return;
@@ -107,48 +66,41 @@ function makeOrder(restaurantId) {
             console.error('주문 처리 중 문제가 발생했습니다:', error);
             alert('주문 처리 중 문제가 발생했습니다.');
         });
-    }
+        }
 
-    function placeOrder(restaurantId, menuId) {
+        function placeOrder(restaurantId, menuId) {
         if (!authorization) {
             alert('인증 정보가 없습니다. 로그인이 필요합니다.');
             return;
         }
-
         // readCurrentOrder 메서드를 호출하여 주문 정보를 가져옵니다.
-         fetch(`/restaurants/${restaurantId}/orders`, {
-        method: 'GET',
-        headers: {
-         'Authorization': 'Bearer ' + authorization,
+        fetch(`/restaurants/${restaurantId}/orders`, {
+            method: 'GET',
+            headers: {
+            'Authorization': 'Bearer ' + authorization,
         }
-    })
-     .then(response => {
-                                if (response.ok) {
-                                    return response.text();
-                                } else {
-                                    throw new Error('Network response was not ok.');
-                                }
-                            })
-                            .then(text => {
-                                // 새 창을 열어서 주문 정보를 표시
-                                var newWindow = window.open('', '_blank');
-                                newWindow.document.write('<html><head><title>주문 정보</title></head><body><h1>주문 정보</h1><p>' + text + '</p></body></html>');
-                            })
-    .catch(error => {
-        console.error('주문 정보를 가져오는 중 문제가 발생했습니다:', error);
-        alert('주문 정보를 가져오는 중 문제가 발생했습니다.');
-    });
-    }
-                        </script>
+        })
+        .then(response => {
+            if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+        })
+        .then(text => {
+            // 새 창을 열어서 주문 정보를 표시
+            var newWindow = window.open('', '_blank');
+            newWindow.document.write('<html><head><title>주문 정보</title></head><body><h1>주문 정보</h1><p>' + text + '</p></body></html>');
+        })
+        .catch(error => {
+            console.error('주문 정보를 가져오는 중 문제가 발생했습니다:', error);
+            alert('주문 정보를 가져오는 중 문제가 발생했습니다.');
+        });
+        }
 
-                    </div>
-                </div>
-            </div>
+        let cart = [];
 
-            <script>
-                let cart = [];
-
-    function addToCart(restaurantId, menuId) {
+        function addToCart(restaurantId, menuId) {
         const quantityInput = document.getElementById('quantity-' + menuId);
         const quantity = quantityInput.value;
 
@@ -179,34 +131,79 @@ function makeOrder(restaurantId) {
                 console.error('장바구니에 담는 중 문제가 발생했습니다:', error);
                 alert('장바구니에 담는 중 문제가 발생했습니다.');
             });
-    }
+            }
 
-                    function deleteMenu(restaurantId, menuId) {
-                        const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
+            function deleteMenu(restaurantId, menuId) {
+            const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
 
-                        if (confirmation) {
-                            const url = `/restaurant/${restaurantId}/menus/${menuId}`;
+            if (confirmation) {
+                const url = `/restaurant/${restaurantId}/menus/${menuId}`;
 
-                            fetch(url, {
-                                method: "DELETE",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                            })
-                                .then(function (response) {
-                                    if (response.ok) {
-                                        alert("메뉴가 성공적으로 삭제되었습니다.");
-                                        location.reload(); // 페이지 새로고침
-                                    } else {
-                                        alert("메뉴 삭제 중 오류가 발생했습니다.");
-                                    }
-                                })
-                                .catch(function (error) {
-                                    console.error("메뉴 삭제 중 오류 발생:", error);
-                                });
-                        }
-
+                fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(function (response) {
+                if (response.ok) {
+                    alert("메뉴가 성공적으로 삭제되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert("메뉴 삭제 중 오류가 발생했습니다.");
                 }
+            })
+            .catch(function (error) {
+                console.error("메뉴 삭제 중 오류 발생:", error);
+            });
+            }
+            }
+    </script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="info-header text-center">
+        <h1>가게 상세 정보</h1>
+    </div>
+    <div id="restaurantId" th:text="${restaurant.id}" style="display: none;"></div>
+    <div class="info-content">
+        <h3 th:text="${restaurant.restaurantName}">Restaurant Name</h3>
+        <p th:text="${restaurant.address}">Restaurant Address</p>
+        <p th:text="${restaurant.resNumber}">Restaurant Phone Number</p>
+        <p th:text="${'Owner: ' + restaurant.ownerName}">Owner</p> <!-- Member 정보를 표시 -->
+        <!-- Details for each menu item -->
+        <h2 class="menu-header mb-4">메뉴</h2>
+        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ');'">주문 목록 보기</button>
+        <button class="btn cart-btn" th:onclick="'makeOrder(' + ${restaurant.id} + ');'">주문 하기</button>
+        <button class="btn cart-btn" th:onclick="'ownerOrder(' + ${restaurant.id} + ');'">사장 주문 목록 보기</button>
+        <div class="row">
+            <!-- Menu items should be dynamically loaded using server-side rendering or client-side JavaScript -->
+            <div class="col-md-4 mb-3" th:each="menu : ${restaurant.menu}">
+
+                <div class="card card-menu">
+                    <img th:src="@{${menu.imageUrl}}" class="card-img-top" alt="Menu Image" onerror="this.onerror=null; this.src='default-image-path.jpg'">
+
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${menu.foodName}">Menu Name</h5>
+                        <p class="card-text" th:text="${'₩ ' + menu.price}">Price</p>
+<!--                        <div class="member-id-input">-->
+<!--                            <label for="memberId">멤버 ID:-->
+<!--                            <input type="number" id="memberId" name="memberId" placeholder="멤버 ID를 입력하세요" required>-->
+<!--                            </label>-->
+<!--                        </div>-->
+                            <label>수량
+                            <input type="number" min="1" value="1" class="quantity-input" th:id="'quantity-' + ${menu.id}">
+                            </label>
+
+                        <!-- '장바구니에 담기' 버튼: AJAX 요청을 통해 서버의 addToOrder 메소드 호출 -->
+                        <button class="btn cart-btn" th:onclick="'addToCart(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">장바구니에 담기</button>
+                        <button class="btn btn-danger delete-btn" th:attr="data-menu-id=${menu.id}" th:onclick="'deleteMenu(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">메뉴 삭제</button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+
             </script>
 
                     </div>
@@ -215,9 +212,6 @@ function makeOrder(restaurantId) {
                 </div>
 
             </div>
-
-
-
         <h2 class="review-header mb-4">리뷰</h2>
         <table class="table table-striped">
             <thead>
