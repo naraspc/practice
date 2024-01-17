@@ -31,16 +31,14 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     console.log('서버 응답 헤더 이름:', response.headers.keys());
     // 로그인이 성공하면 Authorization과 Authorization-Refresh를 로컬 스토리지에 저장
     if (response.ok) {
-      const authorizationHeader = response.headers.authorization;
-      const refreshHeader = response.headers.authorizationRefresh;
+      const AuthorizationHeader = response.headers.get('Authorization');
+      const RefreshHeader = response.headers.get('Authorization-Refresh');
 
-      // 로그로 확인
-      console.log('Authorization:', authorizationHeader);
-      console.log('Authorization-Refresh:', refreshHeader);
 
       // 로컬 스토리지에 저장
-      localStorage.setItem('Authorization', authorizationHeader);
-      localStorage.setItem('Authorization-Refresh', refreshHeader);
+      localStorage.setItem('Authorization', AuthorizationHeader);
+      localStorage.setItem('Authorization-Refresh', RefreshHeader);
+
 
       // 로그인 성공 후 원하는 페이지로 리다이렉트 (예: 레스토랑 페이지)
       window.location.href = 'http://localhost:8080/restaurants';
