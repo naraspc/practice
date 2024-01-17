@@ -58,10 +58,11 @@
     </style>
 </head>
 <body>
+
 <div class="form-container">
     <!-- Create Menu Form -->
     <h2>Create Menu</h2>
-    <form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus'}" method="post" enctype="multipart/form-data">
+    <form id="menuForm" method="post" enctype="multipart/form-data">
         <label for="createImage">Image:</label>
         <input type="file" id="createImage" name="image" accept="image/*" required/>
         <label for="createFoodName">Menu Name:</label>
@@ -70,7 +71,50 @@
         <input type="number" id="createPrice" name="price" required/>
         <button type="submit">Create Menu</button>
     </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
 </div>
+<script th:inline="javascript">
+    const restaurantsId = [[${restaurantsId}]]; // 레스토랑 ID 가져오기
+    const menuId = [[${menuId}]]; // 메뉴 ID 가져오기
+</script>
+<script>
+    $(document).ready(function() {
+        // 폼이 제출되면
+        $("#menuForm").submit(function(event) {
+            event.preventDefault(); // 기본 폼 제출 동작을 중지합니다.
+
+            // 로컬 스토리지에서 Authorization 정보 가져오기
+            const authorization = localStorage.getItem("Authorization");
+
+            // HTTP 요청 헤더에 Authorization 정보 추가
+            const headers = {
+                'Authorization': 'Bearer ' + authorization
+            };
+
+            // 폼 데이터를 FormData 객체로 가져옵니다.
+            const formData = new FormData(this);
+
+            // 서버로 POST 요청 보내기
+            $.ajax({
+                url: '/restaurant/' + restaurantsId + '/menus',
+                type: 'POST',
+                headers: headers,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // 서버 응답 처리
+                    console.log(response);
+                    // 원하는 동작 수행
+                },
+                error: function(error) {
+                    // 에러 처리
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
 <div class="form-container">
     <!-- Update Menu Form -->
     <h2>Update Menu</h2>
