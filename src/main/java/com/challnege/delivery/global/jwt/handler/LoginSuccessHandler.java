@@ -37,10 +37,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                     user.updateRefreshToken(refreshToken);
                     memberRepository.saveAndFlush(user);
                 });
-
-        // 로그인 성공 후 index.html로 리다이렉트
-        super.setDefaultTargetUrl("http://localhost:8080/restaurants");
-        super.onAuthenticationSuccess(request, response, authentication);
     }
 
     private String extractUsername(Authentication authentication) {

@@ -30,7 +30,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public String readCurrentOrder(@AuthenticationPrincipal UserDetails auth,
+    public String readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
+                                   @AuthenticationPrincipal UserDetails auth,
                                    Model model) {
         OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
         model.addAttribute("orderResponseDto", orderResponseDto);
