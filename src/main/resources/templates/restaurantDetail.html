@@ -57,11 +57,11 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${menu.foodName}">Menu Name</h5>
                         <p class="card-text" th:text="${'₩ ' + menu.price}">Price</p>
-                        <div class="member-id-input">
-                            <label for="memberId">멤버 ID:
-                            <input type="number" id="memberId" name="memberId" placeholder="멤버 ID를 입력하세요" required>
-                            </label>
-                        </div>
+<!--                        <div class="member-id-input">-->
+<!--                            <label for="memberId">멤버 ID:-->
+<!--                            <input type="number" id="memberId" name="memberId" placeholder="멤버 ID를 입력하세요" required>-->
+<!--                            </label>-->
+<!--                        </div>-->
                             <label>수량
                             <input type="number" min="1" value="1" class="quantity-input" th:id="'quantity-' + ${menu.id}">
                             </label>
@@ -69,36 +69,39 @@
                         <!-- '장바구니에 담기' 버튼: AJAX 요청을 통해 서버의 addToOrder 메소드 호출 -->
                         <button class="btn cart-btn" th:onclick="'addToCart(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">장바구니에 담기</button>
                         <button class="btn btn-danger delete-btn" th:attr="data-menu-id=${menu.id}" th:onclick="'deleteMenu(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">메뉴 삭제</button>
-                        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ', ' + ${menu.id} + ', ' + ${memberId} + ');'">주문하러 가기</button>
+                        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ');'">주문 목록 보기</button>
                         <script>
-                            function placeOrder(restaurantId, menuId) {
-                                var memberId = document.getElementById("memberId").value;
-                                // memberId가 유효한지 확인하고 필요한 경우 경고 메시지를 표시합니다.
-                                if (!memberId) {
-                                    alert('멤버 ID를 입력하세요.');
-                                    return;
-                                }
+    const authorization = localStorage.getItem('Authorization');
 
-                                // readCurrentOrder 메서드를 호출하여 주문 정보를 가져옵니다.
-                                fetch(`/restaurants/{restaurantId}/orders?memberId=${memberId}`, {
-                                    method: 'GET',
-                                })
-                                    .then(response => {
-                                        if (response.ok) {
-                                            return response.text();
-                                        } else {
-                                            throw new Error('Network response was not ok.');
-                                        }
-                                    })
-                                    .then(text => {
-                                        // 주문 정보를 가져온 후, orders.html 페이지로 이동합니다.
-                                        window.location.href = `/restaurants/{restaurantId}/orders?memberId=${memberId}`;
-                                    })
-                                    .catch(error => {
-                                        console.error('주문 정보를 가져오는 중 문제가 발생했습니다:', error);
-                                        alert('주문 정보를 가져오는 중 문제가 발생했습니다.');
-                                    });
-                            }
+    function placeOrder(restaurantId, menuId) {
+        if (!authorization) {
+            alert('인증 정보가 없습니다. 로그인이 필요합니다.');
+            return;
+        }
+
+        // readCurrentOrder 메서드를 호출하여 주문 정보를 가져옵니다.
+         fetch(`/restaurants/${restaurantId}/orders`, {
+        method: 'GET',
+        headers: {
+         'Authorization': 'Bearer ' + authorization,
+        }
+    })
+     .then(response => {
+        if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    })
+    .then(text => {
+        // 주문 정보를 가져온 후, orders.html 페이지로 이동합니다.
+        window.location.href = `/restaurants/${restaurantId}/orders`;
+    })
+    .catch(error => {
+        console.error('주문 정보를 가져오는 중 문제가 발생했습니다:', error);
+        alert('주문 정보를 가져오는 중 문제가 발생했습니다.');
+    });
+    }
                         </script>
 
                     </div>
@@ -108,39 +111,38 @@
             <script>
                 let cart = [];
 
-                    function addToCart(restaurantId, menuId) {
-                        const quantityInput = document.getElementById('quantity-' + menuId);
-                        const quantity = quantityInput.value;
-                        const memberIdInput = document.getElementById("memberId");
-                        const memberId = memberIdInput.value;
+    function addToCart(restaurantId, menuId) {
+        const quantityInput = document.getElementById('quantity-' + menuId);
+        const quantity = quantityInput.value;
 
-                        if (!memberId) {
-                            alert('멤버 ID를 입력 하세요.');
-                            return;
-                        }
+        if (!authorization) {
+            alert('인증 정보가 없습니다. 로그인이 필요합니다.');
+            return;
+        }
 
-                        fetch(`/restaurants/${restaurantId}/orders/${menuId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: `quantity=${quantity}&memberId=${memberId}`
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    return response.text();
-                                } else {
-                                    throw new Error('Network response was not ok.');
-                                }
-                            })
-                            .then(text => {
-                                alert('장바구니에 담겼습니다.');
-                            })
-                            .catch(error => {
-                                console.error('장바구니에 담는 중 문제가 발생했습니다:', error);
-                                alert('장바구니에 담는 중 문제가 발생했습니다.');
-                            });
-                    }
+        fetch(`/restaurants/${restaurantId}/orders/${menuId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Bearer ' + authorization,
+            },
+            body: `quantity=${quantity}`
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(text => {
+                alert('장바구니에 담겼습니다.');
+            })
+            .catch(error => {
+                console.error('장바구니에 담는 중 문제가 발생했습니다:', error);
+                alert('장바구니에 담는 중 문제가 발생했습니다.');
+            });
+    }
 
                     function deleteMenu(restaurantId, menuId) {
                         const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
