@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class OrderResponseDto {
+    private Long orderId;
 
     private List<OrderMenu> orderMenuList;
     private Long totalPrice;
@@ -21,7 +22,8 @@ public class OrderResponseDto {
 
 
     @Builder
-    public OrderResponseDto(List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber) {
+    public OrderResponseDto(Long orderId,List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber) {
+        this.orderId = orderId;
         this.orderMenuList = orderMenuList;
         this.totalPrice = totalPrice;
         this.status = status;
@@ -31,6 +33,7 @@ public class OrderResponseDto {
 
     public static OrderResponseDto fromEntity(Order order, Restaurant restaurant) {
         return OrderResponseDto.builder()
+                .orderId(order.getOrderId())
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
@@ -41,6 +44,7 @@ public class OrderResponseDto {
 
     public static OrderResponseDto fromEntityByOwner(Order order) {
         return OrderResponseDto.builder()
+                .orderId(order.getOrderId())
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())

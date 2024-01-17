@@ -49,11 +49,15 @@
         <p th:text="${'Owner: ' + restaurant.ownerName}">Owner</p> <!-- Member 정보를 표시 -->
         <!-- Details for each menu item -->
         <h2 class="menu-header mb-4">메뉴</h2>
+        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ');'">주문 목록 보기</button>
+        <button class="btn cart-btn" th:onclick="'makeOrder(' + ${restaurant.id} + ');'">주문 하기</button>
         <div class="row">
             <!-- Menu items should be dynamically loaded using server-side rendering or client-side JavaScript -->
             <div class="col-md-4 mb-3" th:each="menu : ${restaurant.menu}">
+
                 <div class="card card-menu">
                     <img th:src="@{${menu.imageUrl}}" class="card-img-top" alt="Menu Image" onerror="this.onerror=null; this.src='default-image-path.jpg'">
+
                     <div class="card-body">
                         <h5 class="card-title" th:text="${menu.foodName}">Menu Name</h5>
                         <p class="card-text" th:text="${'₩ ' + menu.price}">Price</p>
@@ -69,9 +73,41 @@
                         <!-- '장바구니에 담기' 버튼: AJAX 요청을 통해 서버의 addToOrder 메소드 호출 -->
                         <button class="btn cart-btn" th:onclick="'addToCart(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">장바구니에 담기</button>
                         <button class="btn btn-danger delete-btn" th:attr="data-menu-id=${menu.id}" th:onclick="'deleteMenu(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">메뉴 삭제</button>
-                        <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ');'">주문 목록 보기</button>
+
+
+
                         <script>
     const authorization = localStorage.getItem('Authorization');
+
+function makeOrder(restaurantId) {
+        if (!authorization) {
+            alert('인증 정보가 없습니다. 로그인이 필요합니다.');
+            return;
+        }
+
+        // 서버의 makeOrder 메소드 호출
+        fetch(`/restaurants/${restaurantId}/orders`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': 'Bearer ' + authorization,
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .then(text => {
+            alert('주문이 완료되었습니다.');
+            window.location.reload(); // 예시로 페이지 새로고침
+        })
+        .catch(error => {
+            console.error('주문 처리 중 문제가 발생했습니다:', error);
+            alert('주문 처리 중 문제가 발생했습니다.');
+        });
+    }
 
     function placeOrder(restaurantId, menuId) {
         if (!authorization) {
@@ -87,16 +123,17 @@
         }
     })
      .then(response => {
-        if (response.ok) {
-            return response.text();
-        } else {
-            throw new Error('Network response was not ok.');
-        }
-    })
-    .then(text => {
-        // 주문 정보를 가져온 후, orders.html 페이지로 이동합니다.
-        window.location.href = `/restaurants/${restaurantId}/orders`;
-    })
+                                if (response.ok) {
+                                    return response.text();
+                                } else {
+                                    throw new Error('Network response was not ok.');
+                                }
+                            })
+                            .then(text => {
+                                // 새 창을 열어서 주문 정보를 표시
+                                var newWindow = window.open('', '_blank');
+                                newWindow.document.write('<html><head><title>주문 정보</title></head><body><h1>주문 정보</h1><p>' + text + '</p></body></html>');
+                            })
     .catch(error => {
         console.error('주문 정보를 가져오는 중 문제가 발생했습니다:', error);
         alert('주문 정보를 가져오는 중 문제가 발생했습니다.');

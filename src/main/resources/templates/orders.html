@@ -44,14 +44,33 @@
         <!-- Form to make an order -->
         <form action="/restaurants/{restaurantId}/orders/{orderId}" method="post">
           <input type="hidden" name="_method" value="patch">
-          <div class="mb-3">
-            <label for="memberIdInput" class="form-label">Member ID:</label>
-            <input type="text" class="form-control" id="memberIdInput" name="memberId" th:value="${memberId}" />
-          </div>
+<!--          <div class="mb-3">-->
+<!--            <label for="memberIdInput" class="form-label">Member ID:</label>-->
+<!--            <input type="text" class="form-control" id="memberIdInput" name="memberId" th:value="${memberId}" />-->
+<!--          </div>-->
 
           <button type="submit" class="btn btn-primary">Make Order</button>
         </form>
+        <script>
+function makeOrder() {
+    // Get Authorization token from local storage
+     const authorization = localStorage.getItem('Authorization');
 
+     fetch(`/restaurants/${restaurantId}/orders`, {
+        method: 'Patch',
+        headers: {
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Authorization': 'Bearer ' + authorization,
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response as needed
+        console.log(data);
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
 
       </div>
       <div th:unless="${orderResponseDto != null}">

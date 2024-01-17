@@ -15,6 +15,7 @@ import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.repository.RestaurantRepository;
 import com.challnege.delivery.domain.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +77,12 @@ public class OrderService {
 
         order.makeOnDelivery();
 
+        return OrderResponseDto.fromEntityByOwner(order);
+    }
+    public OrderResponseDto makeOrderTest(UserDetails auth) {
+        Member member = memberService.findMemberByEmail(auth.getUsername());
+        Order order = findBeforeOrderById(member.getMemberId());
+        order.makeOnDelivery();
         return OrderResponseDto.fromEntityByOwner(order);
     }
 
