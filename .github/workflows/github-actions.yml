@@ -80,7 +80,7 @@ jobs:
         if: contains(github.ref, 'be/dev')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          # Generate a unique version tag, for example, using the commit hash
+#           Generate a unique version tag, for example, using the commit hash
           version_tag=$(git rev-parse --short HEAD)
           docker build -t ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag .
           docker push ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag
@@ -112,12 +112,12 @@ jobs:
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           env:
-            VERSION_TAG: $version_tag  # Export version_tag as an environment variable
+            VERSION_TAG: ${{ steps.docker-push.outputs.version_tag }}  # Export version_tag as an environment variable
           script: |
             sudo docker ps
-            # Pull the specific version of the Docker image
+#             Pull the specific version of the Docker image
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:${{ env.VERSION_TAG }}
-            # Run the updated Docker container
+#             Run the updated Docker container
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:${{ env.VERSION_TAG }}
-            # Clean up old Docker images
+#             Clean up old Docker images
             sudo docker image prune -f
