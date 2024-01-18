@@ -80,8 +80,10 @@ jobs:
         if: contains(github.ref, 'be/dev')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev .
-          docker push ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
+          # Generate a unique version tag, for example, using the commit hash
+          version_tag=$(git rev-parse --short HEAD)
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag .
+          docker push ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag
 
       ## deploy to production
       - name: Deploy to prod
@@ -107,11 +109,13 @@ jobs:
         with:
           host: ${{ secrets.HOST_DEV }} # EC2 퍼블릭 IPv4 DNS
           username: ${{ secrets.USERNAME }} # ubuntu
-#          password: ${{ secrets.PASSWORD }}
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
+            # Pull the specific version of the Docker image
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag
+            # Run the updated Docker container
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag
+            # Clean up old Docker images
             sudo docker image prune -f
