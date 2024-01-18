@@ -29,15 +29,26 @@ public class OrderController {
         return "redirect:/restaurants/" + restaurantId;
     }
 
-    @GetMapping
-    public String readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
-                                   @AuthenticationPrincipal UserDetails auth,
-                                   Model model) {
-        OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
-        model.addAttribute("orderResponseDto", orderResponseDto);
-        return "orders";
-    }
+//    @GetMapping
+//    public String readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
+//                                   @AuthenticationPrincipal UserDetails auth,
+//                                   Model model) {
+//        OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
+//        model.addAttribute("orderResponseDto", orderResponseDto);
+//        return "orders";
+//    }
 
+    @GetMapping
+    public ResponseEntity<OrderResponseDto> readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
+                                                             @AuthenticationPrincipal UserDetails auth) {
+        OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
+
+        if (orderResponseDto != null) {
+            return ResponseEntity.ok(orderResponseDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 //    @GetMapping("/owner")
 //    public ResponseEntity readOrdersByOwner(@PathVariable("restaurantId") long restaurantId,
 //                                            @AuthenticationPrincipal UserDetails auth) {

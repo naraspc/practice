@@ -4,6 +4,8 @@ import com.challnege.delivery.domain.order.entity.Order;
 import com.challnege.delivery.domain.order.entity.Status;
 import com.challnege.delivery.domain.ordermenu.entity.OrderMenu;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 public class OrderResponseDto {
 
+    @JsonIgnore
     private List<OrderMenu> orderMenuList;
     private Long totalPrice;
     private Status status;

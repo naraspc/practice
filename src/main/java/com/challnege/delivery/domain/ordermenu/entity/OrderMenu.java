@@ -2,6 +2,9 @@ package com.challnege.delivery.domain.ordermenu.entity;
 
 import com.challnege.delivery.domain.menu.entity.Menu;
 import com.challnege.delivery.domain.order.entity.Order;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,6 +20,7 @@ public class OrderMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderMenuId;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

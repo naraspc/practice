@@ -2,58 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form</title>
-</head>
-<body>
+  <title>Order Details</title>
 
-<!-- 로그인을 위한 폼 -->
-<form id="loginForm" action="/login" method="post" enctype="multipart/form-data">
-  <!-- email과 password를 form-data로 전송 -->
-  <input type="text" name="email" placeholder="Email" required>
-  <input type="password" name="password" placeholder="Password" required>
-  <button type="submit">Login</button>
-</form>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="text-center">Order Details</h2>
+    </div>
+    <div class="card-body" id="orderDetails">
+
+      <!-- 내용은 여기에 동적으로 삽입됩니다 -->
+
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-  // 폼 제출을 막아 기본 동작을 중단
-  event.preventDefault();
+  window.onload = function() {
+    const orderData = JSON.parse(sessionStorage.getItem('orderData'));
+    const orderDetailsElement = document.getElementById('orderDetails');
 
-  // 로그인 요청 후 응답에서 Authorization과 Authorization-Refresh를 추출
-  fetch('/login', {
-    method: 'POST',
-    body: new FormData(event.target),
-  })
-.then(response => {
-  // 로그로 서버 응답 헤더 확인
-  console.log('서버 응답 헤더:', response.headers.get('Authorization'));
-  console.log('서버 응답 헤더:',  response.headers.get('Connection'));
-  console.log('서버 응답 헤더:', response.headers.get('Authorization-Refresh'));
+    if (orderData) {
+      let htmlContent = `
+        <h4>Restaurant: <span>${orderData.restaurant.restaurantName}</span></h4>
+        <h5>Status: <span>${orderData.status}</span></h5>
 
-  // 로그인이 성공하면 Authorization과 Authorization-Refresh를 로컬 스토리지에 저장
-  if (response.ok) {
-    const authorizationHeader = response.headers.get('Authorization');
-    const refreshHeader = response.headers.get('Authorization-Refresh');
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Food Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+          </tr>
+          </thead>
+          <tbody>`;
 
-    // 로그로 확인
-    console.log('Authorization:', authorizationHeader);
-    console.log('Authorization-Refresh:', refreshHeader);
+      orderData.orderMenuList.forEach(orderMenu => {
+        htmlContent += `
+          <tr>
+            <td>${orderMenu.menu.foodName}</td>
+            <td>${orderMenu.quantity}</td>
+            <td>${orderMenu.totalPrice}</td>
+          </tr>`;
+      });
 
-    // 로컬 스토리지에 저장
-    localStorage.setItem('Authorization', authorizationHeader);
-    localStorage.setItem('Authorization-Refresh', refreshHeader);
+      htmlContent += `
+          </tbody>
+        </table>
+        <p>Total Price: <span>${orderData.totalPrice}</span></p>
+      `;
 
-    // 로그인 성공 후 원하는 페이지로 리다이렉트 (예: 레스토랑 페이지)
-    window.location.href = 'http://localhost:8080/restaurants';
-  } else {
-    // 로그인이 실패한 경우에 대한 처리
-    console.error('로그인 실패!');
+      orderDetailsElement.innerHTML = htmlContent;
+    } else {
+      orderDetailsElement.innerHTML = `<p class="text-muted">No order found for the given member.</p>`;
+    }
   }
-})
-.catch(error => console.error('에러 발생:', error));
-});
 </script>
-
 </body>
 </html>

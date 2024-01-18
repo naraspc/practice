@@ -139,40 +139,5 @@ image/*" required/>
     </form>
 
 </div>
-<<div class="form-container">
-    <!-- Delete Menu Form -->
-    <h2>Delete Menu</h2>
-    <button id="deleteMenuButton">Delete Menu</button>
-</div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Delete 버튼을 클릭할 때 실행될 함수
-        document.getElementById("deleteMenuButton").addEventListener("click", function () {
-            // restaurantsId와 menuId를 가져와서 URL을 생성합니다.
-            var restaurantsId = restaurantsId; // 여기에 실제 값 사용
-            var menuId = menuId; // 여기에 실제 값 사용
-            var url = `/restaurant/${restaurantsId}/menus/${menuId}`;
-
-            // Fetch API를 사용하여 DELETE 요청을 보냅니다.
-            fetch(url, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    // 성공적으로 삭제된 경우 원하는 작업을 수행합니다.
-                    // 예를 들어, 페이지 새로고침 또는 다른 동작을 수행할 수 있습니다.
-                    location.reload(); // 페이지 새로고침
-                })
-                .catch(function (error) {
-                    console.error("There was a problem with the fetch operation:", error);
-                });
-        });
-    });
-</script>
 </body>
 </html>
