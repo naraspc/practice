@@ -1,3 +1,5 @@
+*.yml
+
 HELP.md
 .gradle
 build/
@@ -19,6 +21,7 @@ bin/
 
 ### IntelliJ IDEA ###
 application-local.yml
+application.yml
 application.properties
 .idea
 *.iws

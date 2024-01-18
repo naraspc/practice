@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .form-container {
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            color: #888;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #5c6bc0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3949ab;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <!-- Create Menu Form -->
+    <h2>Create Menu</h2>
+    <form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus'}" method="post" enctype="multipart/form-data">
+        <label for="createImage">Image:</label>
+        <input type="file" id="createImage" name="image" accept="image/*" required/>
+        <label for="createFoodName">Menu Name:</label>
+        <input type="text" id="createFoodName" name="foodName" required/>
+        <label for="createPrice">Price:</label>
+        <input type="number" id="createPrice" name="price" required/>
+        <button type="submit">Create Menu</button>
+    </form>
+</div>
+<div class="form-container">
+    <!-- Update Menu Form -->
+    <h2>Update Menu</h2>
+    <form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus/' + ${menuId}}" method="post" enctype="multipart/form-data">
+    <label for="updateImage">New Image:</label>
+        <input type="file" id="updateImage" name="image" accept="image/*" required/>
+        <label for="updateFoodName">New Menu Name:</label>
+        <input type="text" id="updateFoodName" name="foodName" required/>
+        <label for="updatePrice">New Price:</label>
+        <input type="number" id="updatePrice" name="price" required/>
+        <button type="submit">Update Menu</button>
+    </form>
+</div>
+<div class="form-container">
+    <!-- Update Menu Image Form -->
+    <h2>Update Menu Image</h2>
+    <form th:action="@{'/restaurant' + ${restaurantsId} + '/menus/' + ${menuId} + '/images'}" method="post" enctype="multipart/form-data">
+        <label for="updateMenuImage">New Image:</label>
+        <input type="file" id="updateMenuImage" name="image" accept="
+image/*" required/>
+        <button type="submit">Update Menu Image</button>
+    </form>
+
+</div>
+<<div class="form-container">
+    <!-- Delete Menu Form -->
+    <h2>Delete Menu</h2>
+    <button id="deleteMenuButton">Delete Menu</button>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Delete 버튼을 클릭할 때 실행될 함수
+        document.getElementById("deleteMenuButton").addEventListener("click", function () {
+            // restaurantsId와 menuId를 가져와서 URL을 생성합니다.
+            var restaurantsId = restaurantsId; // 여기에 실제 값 사용
+            var menuId = menuId; // 여기에 실제 값 사용
+            var url = `/restaurant/${restaurantsId}/menus/${menuId}`;
+
+            // Fetch API를 사용하여 DELETE 요청을 보냅니다.
+            fetch(url, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    // 성공적으로 삭제된 경우 원하는 작업을 수행합니다.
+                    // 예를 들어, 페이지 새로고침 또는 다른 동작을 수행할 수 있습니다.
+                    location.reload(); // 페이지 새로고침
+                })
+                .catch(function (error) {
+                    console.error("There was a problem with the fetch operation:", error);
+                });
+        });
+    });
+</script>
+</body>
+</html>
