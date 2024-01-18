@@ -81,8 +81,8 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           version_tag=$(git rev-parse --short HEAD)
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag .
-          docker push ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:$version_tag
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev .
+          docker push ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
 
       ## deploy to production
       - name: Deploy to prod
@@ -110,10 +110,9 @@ jobs:
           username: ${{ secrets.USERNAME }} # ubuntu
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
-          env:
-            VERSION_TAG: ${{ toJSON(steps.docker-push.outputs.version_tag) }}
+          envs: GITHUB_SHA
           script: |
-            sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:${{ env.VERSION_TAG }}
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev:${{ env.VERSION_TAG }}
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
             sudo docker image prune -f
