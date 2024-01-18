@@ -45,7 +45,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     localStorage.setItem('Authorization-Refresh', refreshHeader);
 
     // 로그인 성공 후 원하는 페이지로 리다이렉트 (예: 레스토랑 페이지)
-    window.location.href = 'http://localhost:8080/restaurants';
+    window.location.href = '/restaurants';
   } else {
     // 로그인이 실패한 경우에 대한 처리
     console.error('로그인 실패!');
