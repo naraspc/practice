@@ -34,33 +34,33 @@
 
     if (orderData) {
       let htmlContent = `
-        <h4>Restaurant: <span>${orderData.restaurant.restaurantName}</span></h4>
-        <h5>Status: <span>${orderData.status}</span></h5>
+      <h4>Restaurant: <span>${orderData.restaurantName}</span></h4>
+      <h5>Status: <span>${orderData.status}</span></h5>
 
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Food Name</th>
-            <th>Quantity</th>
-            <th>Total Price</th>
-          </tr>
-          </thead>
-          <tbody>`;
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Food Name</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+        </tr>
+        </thead>
+        <tbody>`;
 
       orderData.orderMenuList.forEach(orderMenu => {
         htmlContent += `
-          <tr>
-            <td>${orderMenu.menu.foodName}</td>
-            <td>${orderMenu.quantity}</td>
-            <td>${orderMenu.totalPrice}</td>
-          </tr>`;
+        <tr>
+          <td>${orderMenu.foodName}</td>
+          <td>${orderMenu.quantity}</td>
+          <td>${orderMenu.totalPrice}</td>
+        </tr>`;
       });
 
       htmlContent += `
-          </tbody>
-        </table>
-        <p>Total Price: <span>${orderData.totalPrice}</span></p>
-      `;
+        </tbody>
+      </table>
+      <p>Total Price: <span>${orderData.totalPrice}</span></p>
+    `;
 
       orderDetailsElement.innerHTML = htmlContent;
     } else {

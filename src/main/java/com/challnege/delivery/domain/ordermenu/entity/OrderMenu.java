@@ -25,6 +25,7 @@ public class OrderMenu {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
@@ -32,12 +33,15 @@ public class OrderMenu {
     private Long quantity;
 
     private Long totalPrice;
+    @Getter
+    private String foodName;
 
     @Builder
-    public OrderMenu(Order order, Long quantity, Long totalPrice, Menu menu) {
+    public OrderMenu(Order order, Long quantity, Long totalPrice, Menu menu, String foodName) {
         this.order = order;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.menu = menu;
+        this.foodName = foodName;
     }
 }

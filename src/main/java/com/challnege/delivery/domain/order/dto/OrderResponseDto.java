@@ -15,21 +15,22 @@ import java.util.stream.Collectors;
 @Getter
 public class OrderResponseDto {
 
-    @JsonIgnore
     private List<OrderMenu> orderMenuList;
     private Long totalPrice;
     private Status status;
     private String restaurantName;
     private String restaurantNumber;
+    private String foodName;
 
 
     @Builder
-    public OrderResponseDto(List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber) {
+    public OrderResponseDto(List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber, String foodName) {
         this.orderMenuList = orderMenuList;
         this.totalPrice = totalPrice;
         this.status = status;
         this.restaurantName = restaurantName;
         this.restaurantNumber = restaurantNumber;
+        this.foodName = foodName;
     }
 
     public static OrderResponseDto fromEntity(Order order, Restaurant restaurant) {
@@ -47,6 +48,9 @@ public class OrderResponseDto {
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
+                .restaurantName(order.getRestaurant().getRestaurantName())
+                .restaurantNumber(order.getRestaurant().getResNumber())
+//                .foodName(order.getOrderMenuList().get)
                 .build();
     }
 
