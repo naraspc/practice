@@ -56,6 +56,7 @@ public class OrderService {
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .order(order)
+                .foodName(menu.getFoodName())
                 .menu(menu)
                 .quantity(quantity)
                 .totalPrice(menu.getPrice() * quantity)
