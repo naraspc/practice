@@ -40,6 +40,130 @@
             margin-top: 10px;
         }
     </style>
+    <script>
+        const authorization = localStorage.getItem('Authorization');
+
+        function makeOrder(restaurantId) {
+            if (!authorization) {
+                alert('인증 정보가 없습니다. 로그인이 필요합니다.');
+                return;
+            }
+
+            // 서버의 makeOrder 메소드 호출
+            fetch(`/restaurants/${restaurantId}/orders`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': 'Bearer ' + authorization,
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
+                })
+                .then(text => {
+                    alert('주문이 완료되었습니다.');
+                    window.location.reload(); // 예시로 페이지 새로고침
+                })
+                .catch(error => {
+                    console.error('주문 처리 중 문제가 발생했습니다:', error);
+                    alert('주문 처리 중 문제가 발생했습니다.');
+                });
+        }
+
+        function placeOrder(restaurantId) {
+            if (!authorization) {
+                alert('인증 정보가 없습니다. 로그인이 필요합니다.');
+                return;
+            }
+
+            fetch(`/restaurants/${restaurantId}/orders`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + authorization,
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('서버에서 응답을 처리할 수 없습니다.');
+                    }
+                })
+                .then(data => {
+                    sessionStorage.setItem('orderData', JSON.stringify(data));
+                    window.location.href = '/orders';
+                })
+                .catch(error => {
+                    console.error('오류가 발생했습니다:', error);
+                    alert('오류가 발생했습니다.');
+                });
+        }
+
+        let cart = [];
+
+        function addToCart(restaurantId, menuId) {
+            const quantityInput = document.getElementById('quantity-' + menuId);
+            const quantity = quantityInput.value;
+
+            if (!authorization) {
+                alert('인증 정보가 없습니다. 로그인이 필요합니다.');
+                return;
+            }
+
+            fetch(`/restaurants/${restaurantId}/orders/${menuId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + authorization,
+                },
+                body: `quantity=${quantity}`
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
+                })
+                .then(text => {
+                    alert('장바구니에 담겼습니다.');
+                })
+                .catch(error => {
+                    console.error('장바구니에 담는 중 문제가 발생했습니다:', error);
+                    alert('장바구니에 담는 중 문제가 발생했습니다.');
+                });
+        }
+
+        function deleteMenu(restaurantId, menuId) {
+            const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
+
+            if (confirmation) {
+                const url = `/restaurant/${restaurantId}/menus/${menuId}`;
+
+                fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(function (response) {
+                        if (response.ok) {
+                            alert("메뉴가 성공적으로 삭제되었습니다.");
+                            location.reload(); // 페이지 새로고침
+                        } else {
+                            alert("메뉴 삭제 중 오류가 발생했습니다.");
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("메뉴 삭제 중 오류 발생:", error);
+                    });
+            }
+        }
+
+    </script>
 </head>
 <body>
 <div class="container mt-5">
@@ -81,112 +205,14 @@
                                 th:onclick="'deleteMenu(' + ${restaurant.id} + ', ' + ${menu.id} + ');'">메뉴 삭제
                         </button>
 
-                        <script>
-                            function deleteMenu(restaurantId, menuId) {
-                                const confirmation = confirm("정말로 이 메뉴를 삭제하시겠습니까?");
-
-                                if (confirmation) {
-                                    const url = `/restaurant/${restaurantId}/menus/${menuId}`;
-
-                                    fetch(url, {
-                                        method: "DELETE",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            "Authorization": "Bearer " + authorization, // Authorization 헤더 추가
-                                        },
-                                    })
-                                        .then(function (response) {
-                                            if (response.ok) {
-                                                alert("메뉴가 성공적으로 삭제되었습니다.");
-                                                location.reload(); // 페이지 새로고침
-                                            } else {
-                                                alert("메뉴 삭제 중 오류가 발생했습니다.");
-                                            }
-                                        })
-                                        .catch(function (error) {
-                                            console.error("메뉴 삭제 중 오류 발생:", error);
-                                        });
-                                }
-                            }
-                        </script>
 
                     </div>
                     <button class="btn cart-btn" th:onclick="'placeOrder(' + ${restaurant.id} + ');'">주문 목록 보기
                     </button>
-                    <script>
-                        const authorization = localStorage.getItem('Authorization');
+                    <button class="btn cart-btn" th:onclick="'makeOrder(' + ${restaurant.id} + ');'">주문 하기</button>
 
-                        function placeOrder(restaurantId) {
-                            if (!authorization) {
-                                alert('인증 정보가 없습니다. 로그인이 필요합니다.');
-                                return;
-                            }
-
-                            fetch(`/restaurants/${restaurantId}/orders`, {
-                                method: 'GET',
-                                headers: {
-                                    'Authorization': 'Bearer ' + authorization,
-                                }
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        return response.json();
-                                    } else {
-                                        throw new Error('서버에서 응답을 처리할 수 없습니다.');
-                                    }
-                                })
-                                .then(data => {
-                                    sessionStorage.setItem('orderData', JSON.stringify(data));
-                                    window.location.href = '/orders';
-                                })
-                                .catch(error => {
-                                    console.error('오류가 발생했습니다:', error);
-                                    alert('오류가 발생했습니다.');
-                                });
-                        }
-                    </script>
                 </div>
             </div>
-
-            <script>
-                let cart = [];
-                function addToCart(restaurantId, menuId) {
-                    const quantityInput = document.getElementById('quantity-' + menuId);
-                    const quantity = quantityInput.value;
-
-                    // 로컬 스토리지에서 Authorization 정보 가져오기
-                    const authorization = localStorage.getItem('Authorization');
-
-                    if (!authorization) {
-                        alert('인증 정보가 없습니다. 로그인이 필요합니다.');
-                        return;
-                    }
-
-                    fetch(`/restaurants/${restaurantId}/orders/${menuId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'Authorization': 'Bearer ' + authorization,
-                        },
-                        body: `quantity=${quantity}`
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                return response.text();
-                            } else {
-                                throw new Error('Network response was not ok.');
-                            }
-                        })
-                        .then(text => {
-                            alert('장바구니에 담겼습니다.');
-                        })
-                        .catch(error => {
-                            console.error('장바구니에 담는 중 문제가 발생했습니다:', error);
-                            alert('장바구니에 담는 중 문제가 발생했습니다.');
-                        });
-                }
-
-            </script>
 
         </div>
 

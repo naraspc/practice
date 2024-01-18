@@ -68,14 +68,12 @@ public class OrderController {
         return "orderOfOwner";
     }
 
-    @PatchMapping("/{orderId}")
+    @PatchMapping
     public String makeOrder(@PathVariable("restaurantId") long restaurantId,
-                            @PathVariable("orderId") long orderId,
                             @AuthenticationPrincipal UserDetails auth,
                             Model model) {
-        OrderResponseDto orderResponseDto = orderService.makeOrder(orderId, auth);
-        model.addAttribute("orderResponseDto", orderResponseDto);
-        return "index";
+        OrderResponseDto orderResponseDto = orderService.makeOrderTest(auth);
+        return "orders";
     }
 
     @PatchMapping("/owner/{orderId}")
