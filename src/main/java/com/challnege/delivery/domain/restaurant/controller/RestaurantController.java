@@ -69,23 +69,22 @@ public class RestaurantController {
 //            return "restaurantList";
 //        }
 
-//        @GetMapping
-//        public String pageFindRestaurantByAll(Model model,
-//                                              @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-//            Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
-//            List<Restaurant> restaurantList = restaurantPage.getContent();
-//
-//            PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
-//            model.addAttribute("pageDto", pageDto);
-//            return "restaurantPage";
-//        }
+        @GetMapping
+        public String pageFindRestaurantByAll(Model model,
+                                              @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
+            List<Restaurant> restaurantList = restaurantPage.getContent();
 
-    @GetMapping
-    public String findRestaurantByAll(Model model) {
-        List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
-        model.addAttribute("restaurants", restaurants);
-        return "restaurantList";
-    }
+            PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
+            model.addAttribute("pageDto", pageDto);
+            return "restaurantPage";
+        }
+//    @GetMapping
+//    public String findRestaurantByAll(Model model) {
+//        List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
+//        model.addAttribute("restaurants", restaurants);
+//        return "restaurantList";
+//    }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
