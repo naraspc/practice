@@ -57,7 +57,6 @@ public class OrderService {
 
         OrderMenu orderMenu = OrderMenu.builder()
                 .order(order)
-                .foodName(menu.getFoodName())
                 .menu(menu)
                 .quantity(quantity)
                 .totalPrice(menu.getPrice() * quantity)
@@ -139,12 +138,5 @@ public class OrderService {
         if (!order.getMember().getMemberId().equals(memberId)) {
             throw new NoSuchElementException("해당 유저만 주문이 가능합니다.");
         }
-    }
-
-    public OrderResponseDto makeOrderTest(UserDetails auth) {
-        Member member = memberService.findMemberByEmail(auth.getUsername());
-        Order order = findBeforeOrderById(member.getMemberId());
-        order.makeOnDelivery();
-        return OrderResponseDto.fromEntityByOwner(order);
     }
 }
