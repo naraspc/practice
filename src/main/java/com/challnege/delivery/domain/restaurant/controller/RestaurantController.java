@@ -94,12 +94,14 @@ public class RestaurantController {
             return new ResponseEntity<>("Cannot delete restaurant", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/search")
     public String pageFindRestaurantsByKeyword(@RequestParam("keyword") String keyword,
                                                Model model,
                                                @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<RestaurantResponseDto> restaurantPage = restaurantService.searchRestaurantsPageable(keyword, pageable);
-        model.addAttribute("pageDto", restaurantPage);
+        PageDto<RestaurantResponseDto> pageDto = new PageDto<>(restaurantPage.getContent(), restaurantPage);
+        model.addAttribute("pageDto", pageDto);
         return "restaurantPage";
     }
 

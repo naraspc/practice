@@ -70,7 +70,7 @@
     </div>
   </form>
   <!-- Thymeleaf loop for restaurant items -->
-  <div th:each="restaurant : ${pageDto.content}" class="restaurant-item">
+  <div th:each="restaurant : ${pageDto.data}" class="restaurant-item">
     <h2 th:text="${restaurant.restaurantName}">Restaurant Name</h2>
     <p th:text="${restaurant.address}">Address</p>
     <p th:text="${'Category: ' + restaurant.category}">Category</p>
@@ -82,10 +82,11 @@
   <!-- Pagination -->
   <div>
     <ul class="pagination">
-      <li th:each="pageNumber : ${#numbers.sequence(0, pageDto.totalPages-1)}">
+      <li th:each="pageNumber : ${#numbers.sequence(0, pageDto.pageInfo.totalPages-1)}">
         <a th:href="@{/restaurants(page=${pageNumber}, size=10)}"
            th:text="${pageNumber + 1}"
-           th:class="${pageDto.number == pageNumber} ? 'active' : ''"></a>
+           th:class="${pageDto.pageInfo.pageNumber == pageNumber} ? 'active' : ''"></a>
+      </li>
     </ul>
   </div>
 </div>
