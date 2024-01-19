@@ -43,6 +43,7 @@ public class OrderController {
                                                              @AuthenticationPrincipal UserDetails auth) {
         OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
 
+
         if (orderResponseDto != null) {
             return ResponseEntity.ok(orderResponseDto);
         } else {
@@ -55,16 +56,15 @@ public class OrderController {
 //        List<OrderResponseDto> orderResponseDtoList = orderService.readOrdersList(restaurantId,auth);
 //        return new ResponseEntity<>(orderResponseDtoList, HttpStatus.OK);
 //    }
+
     @GetMapping("/owner")
     public String readOrdersByOwner(@PathVariable("restaurantId") long restaurantId,
                                     @AuthenticationPrincipal UserDetails auth,
                                     Model model) {
         List<OrderResponseDto> orderResponseDtoList = orderService.readOrdersListByOwner(restaurantId, auth);
 
-        // Model에 주문 목록 추가
-        model.addAttribute("orders", orderResponseDtoList);
+        model.addAttribute("orderOfOwner", orderResponseDtoList);
 
-        // Thymeleaf 템플릿의 경로 반환
         return "orderOfOwner";
     }
 

@@ -28,6 +28,28 @@
         }
     </style>
 
+    <script>
+        <script>
+function makeOrder() {
+    // Get Authorization token from local storage
+     const authorization = localStorage.getItem('Authorization');
+
+     fetch(`/restaurants/${restaurantId}/orders`, {
+        method: 'Patch',
+        headers: {
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Authorization': 'Bearer ' + authorization,
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response as needed
+        console.log(data);
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+    </script>
 </head>
 <body>
 <div class="container mt-4">

@@ -4,8 +4,6 @@ import com.challnege.delivery.domain.order.entity.Order;
 import com.challnege.delivery.domain.order.entity.Status;
 import com.challnege.delivery.domain.ordermenu.entity.OrderMenu;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,27 +12,28 @@ import java.util.stream.Collectors;
 
 @Getter
 public class OrderResponseDto {
+    private Long orderId;
 
     private List<OrderMenu> orderMenuList;
     private Long totalPrice;
     private Status status;
     private String restaurantName;
     private String restaurantNumber;
-    private String foodName;
 
 
     @Builder
-    public OrderResponseDto(List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber, String foodName) {
+    public OrderResponseDto(Long orderId,List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber) {
+        this.orderId = orderId;
         this.orderMenuList = orderMenuList;
         this.totalPrice = totalPrice;
         this.status = status;
         this.restaurantName = restaurantName;
         this.restaurantNumber = restaurantNumber;
-        this.foodName = foodName;
     }
 
     public static OrderResponseDto fromEntity(Order order, Restaurant restaurant) {
         return OrderResponseDto.builder()
+                .orderId(order.getOrderId())
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
@@ -45,12 +44,10 @@ public class OrderResponseDto {
 
     public static OrderResponseDto fromEntityByOwner(Order order) {
         return OrderResponseDto.builder()
+                .orderId(order.getOrderId())
                 .orderMenuList(order.getOrderMenuList())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
-                .restaurantName(order.getRestaurant().getRestaurantName())
-                .restaurantNumber(order.getRestaurant().getResNumber())
-//                .foodName(order.getOrderMenuList().get)
                 .build();
     }
 
@@ -59,4 +56,3 @@ public class OrderResponseDto {
                 .map(OrderResponseDto::fromEntityByOwner)
                 .collect(Collectors.toList());
     }
-}

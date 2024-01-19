@@ -119,7 +119,7 @@
     <!-- Update Menu Form -->
     <h2>Update Menu</h2>
     <form th:action="@{'/restaurant/' + ${restaurantsId} + '/menus/' + ${menuId}}" method="post" enctype="multipart/form-data">
-    <label for="updateImage">New Image:</label>
+        <label for="updateImage">New Image:</label>
         <input type="file" id="updateImage" name="image" accept="image/*" required/>
         <label for="updateFoodName">New Menu Name:</label>
         <input type="text" id="updateFoodName" name="foodName" required/>
