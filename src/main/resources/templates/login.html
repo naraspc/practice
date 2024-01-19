@@ -36,9 +36,6 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const authorizationHeader = response.headers.get('Authorization');
     const refreshHeader = response.headers.get('Authorization-Refresh');
 
-    // 로그로 확인
-    console.log('Authorization:', authorizationHeader);
-    console.log('Authorization-Refresh:', refreshHeader);
 
     // 로컬 스토리지에 저장
     localStorage.setItem('Authorization', authorizationHeader);

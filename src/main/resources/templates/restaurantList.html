@@ -66,7 +66,7 @@ function makeOrder() {
         <p th:text="${'Category: ' + restaurant.category}">Category</p>
         <p th:text="${'Tel: ' + restaurant.resNumber}">Phone Number</p>
         <a th:href="@{'/restaurants/' + ${restaurant.id}}" class="btn btn-primary">메뉴 보기!</a>
-        <a th:href="@{'/restaurant/' + ${restaurant.id}}" class="btn btn-primary">메뉴 추가하기!</a>
+        <a th:href="@{'/restaurant/' + ${restaurant.id}}" class="btn btn-primary" th:onclick="addToMenu()">메뉴 추가하기!</a>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
