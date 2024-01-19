@@ -22,7 +22,7 @@ public class OrderResponseDto {
 
 
     @Builder
-    public OrderResponseDto(Long orderId,List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber) {
+    public OrderResponseDto(Long orderId, List<OrderMenu> orderMenuList, Long totalPrice, Status status, String restaurantName, String restaurantNumber) {
         this.orderId = orderId;
         this.orderMenuList = orderMenuList;
         this.totalPrice = totalPrice;
@@ -56,3 +56,4 @@ public class OrderResponseDto {
                 .map(OrderResponseDto::fromEntityByOwner)
                 .collect(Collectors.toList());
     }
+}
