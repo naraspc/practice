@@ -69,16 +69,17 @@ public class RestaurantController {
 //            return "restaurantList";
 //        }
 
-        @GetMapping
-        public String pageFindRestaurantByAll(Model model,
-                                              @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-            Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
-            List<Restaurant> restaurantList = restaurantPage.getContent();
+//        @GetMapping
+//        public String pageFindRestaurantByAll(Model model,
+//                                              @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+//            Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
+//            List<Restaurant> restaurantList = restaurantPage.getContent();
+//
+//            PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
+//            model.addAttribute("pageDto", pageDto);
+//            return "restaurantPage";
+//        }
 
-            PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
-            model.addAttribute("pageDto", pageDto);
-            return "restaurantPage";
-        }
     @GetMapping
     public String findRestaurantByAll(Model model) {
         List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
@@ -95,11 +96,12 @@ public class RestaurantController {
         }
     }
     @GetMapping("/search")
-    public String findRestaurantsByCategoryAndName(@RequestParam("keyword") String keyword,
-                                                   Model model) {
-        List<Restaurant> restaurants = restaurantService.searchRestaurants(keyword);
-        model.addAttribute("restaurants", restaurants);
-        return "restaurantList";
+    public String pageFindRestaurantsByKeyword(@RequestParam("keyword") String keyword,
+                                               Model model,
+                                               @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<RestaurantResponseDto> restaurantPage = restaurantService.searchRestaurantsPageable(keyword, pageable);
+        model.addAttribute("pageDto", restaurantPage);
+        return "restaurantPage";
     }
 
 }
