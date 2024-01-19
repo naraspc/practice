@@ -3,10 +3,6 @@ package com.challnege.delivery.domain.order.entity;
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.ordermenu.entity.OrderMenu;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,10 +32,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-
-    @JsonManagedReference
     @OneToMany(mappedBy = "order")
-    private List<OrderMenu> orderMenuList;
+    private List<OrderMenu> orderMenuList = new ArrayList<>();
 
 
     @Builder
