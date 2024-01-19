@@ -29,33 +29,14 @@ public class OrderController {
         return "redirect:/restaurants/" + restaurantId;
     }
 
-//    @GetMapping
-//    public String readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
-//                                   @AuthenticationPrincipal UserDetails auth,
-//                                   Model model) {
-//        OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
-//        model.addAttribute("orderResponseDto", orderResponseDto);
-//        return "orders";
-//    }
-
     @GetMapping
-    public ResponseEntity<OrderResponseDto> readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
-                                                             @AuthenticationPrincipal UserDetails auth) {
+    public String readCurrentOrder(@PathVariable("restaurantId") long restaurantId,
+                                   @AuthenticationPrincipal UserDetails auth,
+                                   Model model) {
         OrderResponseDto orderResponseDto = orderService.readCurrentOrder(auth);
-
-
-        if (orderResponseDto != null) {
-            return ResponseEntity.ok(orderResponseDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        model.addAttribute("orderResponseDto", orderResponseDto);
+        return "orders";
     }
-//    @GetMapping("/owner")
-//    public ResponseEntity readOrdersByOwner(@PathVariable("restaurantId") long restaurantId,
-//                                            @AuthenticationPrincipal UserDetails auth) {
-//        List<OrderResponseDto> orderResponseDtoList = orderService.readOrdersList(restaurantId,auth);
-//        return new ResponseEntity<>(orderResponseDtoList, HttpStatus.OK);
-//    }
 
     @GetMapping("/owner")
     public String readOrdersByOwner(@PathVariable("restaurantId") long restaurantId,
@@ -67,7 +48,6 @@ public class OrderController {
 
         return "orderOfOwner";
     }
-
     @PatchMapping
     public String makeOrder(@PathVariable("restaurantId") long restaurantId,
                             @AuthenticationPrincipal UserDetails auth,
