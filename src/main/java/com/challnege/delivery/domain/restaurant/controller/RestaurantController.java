@@ -79,12 +79,12 @@ public class RestaurantController {
             model.addAttribute("pageDto", pageDto);
             return "restaurantPage";
         }
-    @GetMapping
-    public String findRestaurantByAll(Model model) {
-        List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
-        model.addAttribute("restaurants", restaurants);
-        return "restaurantList";
-    }
+//    @GetMapping
+//    public String findRestaurantByAll(Model model) {
+//        List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
+//        model.addAttribute("restaurants", restaurants);
+//        return "restaurantList";
+//    }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {
