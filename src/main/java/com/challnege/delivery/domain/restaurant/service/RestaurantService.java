@@ -8,6 +8,9 @@ import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.repository.RestaurantRepository;
 import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +57,10 @@ public class RestaurantService {
 
         return RestaurantResponseDto.fromListRestaurantEntity(restaurants);
 
+    }
+    public Page<Restaurant> pageFindRestaurantByAll(Pageable pageable) {
+        Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+        return restaurantRepository.findAll(pageRequest);
     }
 
     //Read by category and name
