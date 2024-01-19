@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,12 +58,34 @@ public class RestaurantService {
     }
 
     //Read by category and name
-    public List<RestaurantResponseDto> findRestaurantsByCategoryAndName(Category category, String name) {
-        List<Restaurant> restaurantsByCategoryAndName = restaurantRepository.findAllRestaurantsByRestaurantNameContainingAndCategory(name, category);
+    @Transactional(readOnly = true)
+    public List<Restaurant> searchRestaurants(String keyword) {
+        List<Category> categories = findCategoriesByKeyword(keyword);
 
-        return RestaurantResponseDto.fromListRestaurantEntity(restaurantsByCategoryAndName);
+        if (!categories.isEmpty()) {
+            return searchByCategories(categories);
+        } else {
+            return searchByName(keyword);
+        }
     }
 
+    public List<Category> findCategoriesByKeyword(String keyword) {
+        List<Category> categories = new ArrayList<>();
+        for (Category category : Category.values()) {
+            if (category.name().contains(keyword)) {
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+    public List<Restaurant> searchByCategories(List<Category> categories) {
+        return restaurantRepository.findRestaurantsByCategoryIn(categories);
+    }
+
+    public List<Restaurant> searchByName(String keyword) {
+        return restaurantRepository.findRestaurantsByRestaurantNameContaining(keyword);
+    }
 
     //Delete
     public Boolean deleteRestaurant(long id) {
