@@ -4,7 +4,13 @@ import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantResponseDto;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.service.RestaurantService;
+import com.challnege.delivery.global.audit.Category;
+import com.challnege.delivery.global.page.PageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +41,7 @@ public class RestaurantController {
     }
 
 
-    //        @PostMapping
+//        @PostMapping
 //        public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
 //                                                       @RequestParam long memberId) {
 //            restaurantService.createRestaurant(restaurantRequestDto, memberId);
@@ -56,6 +62,23 @@ public class RestaurantController {
         return "restaurantDetail";
     }
 
+//        @GetMapping
+//        public String findRestaurantByAll(Model model) {
+//            List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
+//            model.addAttribute("restaurants", restaurants);
+//            return "restaurantList";
+//        }
+
+        @GetMapping
+        public String pageFindRestaurantByAll(Model model,
+                                              @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
+            List<Restaurant> restaurantList = restaurantPage.getContent();
+
+            PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
+            model.addAttribute("pageDto", pageDto);
+            return "restaurantPage";
+        }
     @GetMapping
     public String findRestaurantByAll(Model model) {
         List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
