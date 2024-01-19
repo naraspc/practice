@@ -112,7 +112,8 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo docker ps
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
+            docker stop $(docker ps -a -q) 
+            docker rm $(docker ps -a -q)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/deliveryrepository_dev
             sudo docker image prune -f
