@@ -21,10 +21,6 @@ repositories {
 	mavenCentral()
 }
 
-jar {
-	enabled = false
-}
-
 dependencies {
 	//security,jwt
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -54,3 +50,8 @@ tasks.named('bootBuildImage') {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+jar {
+	enabled = false
+}
+

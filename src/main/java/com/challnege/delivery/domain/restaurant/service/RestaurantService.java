@@ -8,10 +8,14 @@ import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.repository.RestaurantRepository;
 import com.challnege.delivery.global.audit.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,15 +59,42 @@ public class RestaurantService {
         return RestaurantResponseDto.fromListRestaurantEntity(restaurants);
 
     }
-
-    //Read by category and name
-    public List<RestaurantResponseDto> findRestaurantsByCategoryAndName(Category category, String name) {
-        List<Restaurant> restaurantsByCategoryAndName = restaurantRepository.findAllRestaurantsByRestaurantNameContainingAndCategory(name, category);
-
-        return RestaurantResponseDto.fromListRestaurantEntity(restaurantsByCategoryAndName);
+    public Page<Restaurant> pageFindRestaurantByAll(Pageable pageable) {
+        Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+        return restaurantRepository.findAll(pageRequest);
     }
 
+    //Read by category and name
+    @Transactional(readOnly = true)
+    public Page<RestaurantResponseDto> searchRestaurantsPageable(String keyword, Pageable pageable) {
+        List<Category> categories = findCategoriesByKeyword(keyword);
 
+        if (!categories.isEmpty()) {
+            return searchByCategoriesPageable(categories, pageable);
+        } else {
+            return searchByNamePageable(keyword, pageable);
+        }
+    }
+
+    public List<Category> findCategoriesByKeyword(String keyword) {
+        List<Category> categories = new ArrayList<>();
+        for (Category category : Category.values()) {
+            if (category.name().contains(keyword)) {
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+    public Page<RestaurantResponseDto> searchByCategoriesPageable(List<Category> categories, Pageable pageable) {
+        Page<Restaurant> findByCategories = restaurantRepository.findRestaurantsByCategoryIn(categories, pageable);
+        return findByCategories.map(RestaurantResponseDto::fromRestaurantEntity);
+    }
+
+    public Page<RestaurantResponseDto> searchByNamePageable(String keyword, Pageable pageable) {
+        Page<Restaurant> findByName = restaurantRepository.findRestaurantsByRestaurantNameContaining(keyword, pageable);
+        return findByName.map(RestaurantResponseDto::fromRestaurantEntity);
+    }
     //Delete
     public Boolean deleteRestaurant(long id) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
