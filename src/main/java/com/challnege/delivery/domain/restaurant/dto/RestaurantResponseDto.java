@@ -43,4 +43,5 @@ public class RestaurantResponseDto {
                 .map(RestaurantResponseDto::fromRestaurantEntity)
                 .collect(Collectors.toList());
     }
+
 }

@@ -66,13 +66,13 @@ public class RestaurantService {
 
     //Read by category and name
     @Transactional(readOnly = true)
-    public List<Restaurant> searchRestaurants(String keyword) {
+    public Page<RestaurantResponseDto> searchRestaurantsPageable(String keyword, Pageable pageable) {
         List<Category> categories = findCategoriesByKeyword(keyword);
 
         if (!categories.isEmpty()) {
-            return searchByCategories(categories);
+            return searchByCategoriesPageable(categories, pageable);
         } else {
-            return searchByName(keyword);
+            return searchByNamePageable(keyword, pageable);
         }
     }
 
@@ -86,14 +86,15 @@ public class RestaurantService {
         return categories;
     }
 
-    public List<Restaurant> searchByCategories(List<Category> categories) {
-        return restaurantRepository.findRestaurantsByCategoryIn(categories);
+    public Page<RestaurantResponseDto> searchByCategoriesPageable(List<Category> categories, Pageable pageable) {
+        Page<Restaurant> findByCategories = restaurantRepository.findRestaurantsByCategoryIn(categories, pageable);
+        return findByCategories.map(RestaurantResponseDto::fromRestaurantEntity);
     }
 
-    public List<Restaurant> searchByName(String keyword) {
-        return restaurantRepository.findRestaurantsByRestaurantNameContaining(keyword);
+    public Page<RestaurantResponseDto> searchByNamePageable(String keyword, Pageable pageable) {
+        Page<Restaurant> findByName = restaurantRepository.findRestaurantsByRestaurantNameContaining(keyword, pageable);
+        return findByName.map(RestaurantResponseDto::fromRestaurantEntity);
     }
-
     //Delete
     public Boolean deleteRestaurant(long id) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
