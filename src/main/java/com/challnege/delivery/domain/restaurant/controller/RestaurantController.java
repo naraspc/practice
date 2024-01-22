@@ -7,6 +7,7 @@ import com.challnege.delivery.domain.restaurant.service.RestaurantService;
 import com.challnege.delivery.global.audit.Category;
 import com.challnege.delivery.global.page.PageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -70,6 +71,7 @@ public class RestaurantController {
 //        }
 
         @GetMapping
+        @Cacheable(value = "Restaurant")
         public String pageFindRestaurantByAll(Model model,
                                               @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
             Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);

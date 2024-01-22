@@ -8,13 +8,16 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
+//@RedisHash("Restaurant")
 @Getter
 @NoArgsConstructor
-public class Restaurant {
+public class Restaurant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
