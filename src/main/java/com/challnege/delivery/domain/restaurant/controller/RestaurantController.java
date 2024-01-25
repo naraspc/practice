@@ -42,7 +42,7 @@ public class RestaurantController {
     }
 
 
-//        @PostMapping
+    //        @PostMapping
 //        public ResponseEntity<String> createRestaurant(@ModelAttribute RestaurantRequestDto restaurantRequestDto,
 //                                                       @RequestParam long memberId) {
 //            restaurantService.createRestaurant(restaurantRequestDto, memberId);
@@ -70,17 +70,17 @@ public class RestaurantController {
 //            return "restaurantList";
 //        }
 
-        @GetMapping
-        @Cacheable(value = "Restaurant")
-        public String pageFindRestaurantByAll(Model model,
-                                              @PageableDefault(size = 10,sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-            Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
-            List<Restaurant> restaurantList = restaurantPage.getContent();
+    @GetMapping
+    @Cacheable(value = "Restaurant")
+    public String pageFindRestaurantByAll(Model model,
+                                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
+        List<Restaurant> restaurantList = restaurantPage.getContent();
 
-            PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
-            model.addAttribute("pageDto", pageDto);
-            return "restaurantPage";
-        }
+        PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
+        model.addAttribute("pageDto", pageDto);
+        return "restaurantPage";
+    }
 //    @GetMapping
 //    public String findRestaurantByAll(Model model) {
 //        List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
