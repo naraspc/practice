@@ -38,6 +38,7 @@ public class RestaurantResponseDto {
                 .build();
     }
 
+
     public static List<RestaurantResponseDto> fromListRestaurantEntity(List<Restaurant> restaurants) {
         return restaurants.stream()
                 .map(RestaurantResponseDto::fromRestaurantEntity)
