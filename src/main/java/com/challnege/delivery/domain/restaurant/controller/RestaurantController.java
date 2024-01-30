@@ -4,10 +4,9 @@ import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.restaurant.dto.RestaurantResponseDto;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.restaurant.service.RestaurantService;
-import com.challnege.delivery.global.audit.Category;
 import com.challnege.delivery.global.page.PageDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -71,22 +70,33 @@ public class RestaurantController {
 //        }
 
     @GetMapping
-    @Cacheable(value = "Restaurant")
     public String pageFindRestaurantByAll(Model model,
-                                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Restaurant> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
-        List<Restaurant> restaurantList = restaurantPage.getContent();
+                                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
 
-        PageDto pageDto = new PageDto<>(RestaurantResponseDto.fromListRestaurantEntity(restaurantList), restaurantPage);
+        Page<RestaurantResponseDto> restaurantPage = restaurantService.pageFindRestaurantByAll(pageable);
+
+        PageDto<RestaurantResponseDto> pageDto = new PageDto<>(restaurantPage.getContent(), restaurantPage);
         model.addAttribute("pageDto", pageDto);
         return "restaurantPage";
     }
-//    @GetMapping
+
+    //    @GetMapping
 //    public String findRestaurantByAll(Model model) {
 //        List<RestaurantResponseDto> restaurants = restaurantService.findRestaurantByAll();
 //        model.addAttribute("restaurants", restaurants);
 //        return "restaurantList";
 //    }
+    @PostMapping("/redis")
+    public ResponseEntity<String> setRedis() {
+        restaurantService.syncRestaurantsToRedis();
+        return ResponseEntity.ok("Data synced to Redis successfully.");
+    }
+    @PatchMapping("/{id}/update")
+    public ResponseEntity<String> updateRestaurant(@PathVariable Long id, @RequestBody RestaurantRequestDto restaurantRequestDto) {
+        restaurantService.updateRestaurant(id, restaurantRequestDto);
+
+        return new ResponseEntity<String>("Update Success", HttpStatus.OK);
+    }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteRestaurant(@PathVariable Long id) {

@@ -1,6 +1,5 @@
 package com.challnege.delivery.domain.restaurant.dto;
 
-import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.menu.entity.Menu;
 import com.challnege.delivery.domain.restaurant.entity.Restaurant;
 import com.challnege.delivery.domain.review.entity.Review;
@@ -9,13 +8,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
 @Builder
-public class RestaurantResponseDto {
+public class RestaurantResponseDto implements Serializable {
     private final Long id;
     private final String restaurantName;
     private final String address;
@@ -43,6 +43,14 @@ public class RestaurantResponseDto {
         return restaurants.stream()
                 .map(RestaurantResponseDto::fromRestaurantEntity)
                 .collect(Collectors.toList());
+    }
+    public static RestaurantResponseDto convertToDto(Restaurant restaurant) {
+        return RestaurantResponseDto.builder()
+                .restaurantName(restaurant.getRestaurantName())
+                .address(restaurant.getAddress())
+                .category(restaurant.getCategory())
+                .resNumber(restaurant.getResNumber())
+                .build();
     }
 
 }

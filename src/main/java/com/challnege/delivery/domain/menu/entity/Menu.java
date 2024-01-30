@@ -6,16 +6,19 @@ import com.challnege.delivery.global.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Menu extends Auditable {
+public class Menu extends Auditable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     // ERD 에서 수정해야할 것 같음. 레스토랑 1 : N 메뉴 로 바꿔야할듯. (수정)

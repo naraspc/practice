@@ -2,6 +2,7 @@ package com.challnege.delivery.domain.restaurant.entity;
 
 import com.challnege.delivery.domain.member.entity.Member;
 import com.challnege.delivery.domain.menu.entity.Menu;
+import com.challnege.delivery.domain.restaurant.dto.RestaurantRequestDto;
 import com.challnege.delivery.domain.review.entity.Review;
 import com.challnege.delivery.global.audit.Category;
 import jakarta.persistence.*;
@@ -14,7 +15,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-//@RedisHash("Restaurant")
 @Getter
 @NoArgsConstructor
 public class Restaurant implements Serializable {
@@ -35,14 +35,14 @@ public class Restaurant implements Serializable {
     @Column(nullable = false)
     private String resNumber;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menu;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
 
@@ -56,6 +56,14 @@ public class Restaurant implements Serializable {
         this.menu = menu;
         this.member = member;
         this.reviews = reviews;
+    }
+
+
+    public void updateRestaurant(RestaurantRequestDto restaurantRequestDto) {
+        this.restaurantName = restaurantRequestDto.getRestaurantName();
+        this.address = restaurantRequestDto.getAddress();
+        this.category = restaurantRequestDto.getCategory();
+        this.resNumber = restaurantRequestDto.getResNumber();
     }
 
 

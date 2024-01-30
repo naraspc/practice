@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableJpaAuditing
 @SpringBootApplication
 @EnableWebSecurity
-//@EnableCaching
+@EnableCaching
 public class DeliveryApplication {
 
 	public static void main(String[] args) {
